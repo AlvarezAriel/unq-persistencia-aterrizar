@@ -1,3 +1,4 @@
+import edu.unq.persistencia.model.UsuarioEntity
 import java.sql.{ResultSet, Statement, DriverManager, Connection}
 import org.h2.tools.DeleteDbFiles
 import org.scalatest._
@@ -24,13 +25,14 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
     stat.execute("insert into test values(1, 'Hello')")
 
     val rs:ResultSet = stat.executeQuery("select * from test")
-    rs.next()
-    assert( rs.getString("name") === "Hello")
-
+    while(rs.next()){
+      assert( rs.getString("name") === "Hello")
+    }
+    println(UsuarioEntity("Juan","Perez","dragonlady48","j@p.com","1985").createSchema)
     stat.close()
   }
 
-  
+
   after {
     conn.close()
   }
