@@ -9,6 +9,7 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
 
   implicit var conection: Connection = _
   implicit var usuariosHome: Home[UsuarioEntity]= _
+  implicit var usuario: UsuarioEntity = _
 
   before {
     DeleteDbFiles.execute("~", "test", true)
@@ -17,33 +18,17 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
     class TestHome extends Home[UsuarioEntity]{
       override val conn: Connection = conection
     }
+
     usuariosHome = new TestHome
-  }
-  
-  test("Creating the Schema works") {
-
-    val stat:Statement = conection.createStatement()
-
-    stat.execute("create table test(id int primary key, name varchar(255))")
-    stat.execute("insert into test(id, nombre) values(1, 'Hello')")
-
-    val rs:ResultSet = stat.executeQuery("select * from test")
-    while(rs.next()){
-      assert( rs.getString("name") === "Hello")
-    }
-    val usuario: UsuarioEntity = UsuarioEntity("Juan", "Perez", "dragonlady48", "j@p.com", "1985")
-    println(usuario.createSchema)
-    println(usuario.attributesMap)
-    stat.close()
+    usuario = UsuarioEntity("Juan", "Perez", "dragonlady48", "j@p.com", "1985")
   }
 
-  test("Locura watemalteca") {
-    val usuario: UsuarioEntity = UsuarioEntity("Juan", "Perez", "dragonlady48", "j@p.com", "1985")
-    val stat:Statement = conection.createStatement()
-    stat.execute(usuario.createSchema)
+  test("se puede crear una tabla a partir de una entidad, insertarle una y luego traerla") {
 
+    usuariosHome.createSchemaFor(usuario)
     usuariosHome.put(usuario)
 
+    val stat:Statement = conection.createStatement()
     val rs:ResultSet = stat.executeQuery(s"select * from ${usuario.tableName}")
     while(rs.next()){
       usuario.attributesMap.foreach( it =>

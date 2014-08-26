@@ -6,6 +6,12 @@ import java.sql.{Statement, Connection}
 trait Home[T <: Entity[_]] {
   implicit val conn: Connection
 
+  def createSchemaFor(entidad:T) = {
+    val stat:Statement = conn.createStatement()
+    stat.execute(entidad.createSchema)
+    stat.close()
+  }
+
   def put(entidad:T) = {
     val stat:Statement = conn.createStatement()
     stat.execute(s"insert into ${entidad.tableName}(${
@@ -14,6 +20,7 @@ trait Home[T <: Entity[_]] {
     }) values(${
       entidad.attributesMap.values.map( "'" + _ + "'" ).mkString(",")
     })")
+    stat.close()
   }
 
   def all: Seq[T] = Seq.empty[T]
