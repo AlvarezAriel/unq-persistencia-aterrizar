@@ -20,7 +20,7 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
     }
 
     usuariosHome = new TestHome
-    usuario = UsuarioEntity("Juan", "Perez", "dragonlady48", "j@p.com", "1985")
+    usuario = UsuarioEntity(11, "Juan", "Perez", "dragonlady48", "a@a.a", "1970-10-10", false, "", "pepita")
   }
 
   test("se puede crear una tabla a partir de una entidad, insertarle una y luego traerla") {
@@ -32,7 +32,7 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
     val rs:ResultSet = stat.executeQuery(s"select * from ${usuario.tableName}")
     while(rs.next()){
       usuario.attributesMap.foreach( it =>
-        assert(rs.getString(it._1) === usuario.attributesMap.get(it._1).get)
+        assert(rs.getObject(it._1) === usuario.attributesMap.get(it._1).get)
       )
     }
 

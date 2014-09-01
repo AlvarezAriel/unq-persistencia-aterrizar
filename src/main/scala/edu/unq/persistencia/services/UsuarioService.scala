@@ -4,11 +4,17 @@ import edu.unq.persistencia.bussinessExceptions._
 import edu.unq.persistencia.bussinessExceptions.UsuarioYaExisteException
 import edu.unq.persistencia.bussinessExceptions.ValidacionException
 import edu.unq.persistencia.model.UsuarioEntity
+import edu.unq.persistencia.cake.service.DefaultServiceComponent
+import edu.unq.persistencia.cake.component.HomeComponentJPA
+import edu.unq.persistencia.homes.{UsuarioHome, Home}
 
-class UsuarioService {
+abstract class UsuarioService {
+
+  implicit val usuarioHome: UsuarioHome
 
   def registrarUsuario ( usuarioNuevo:UsuarioEntity) = {
-    throw UsuarioYaExisteException()
+    //TODO: validar existencia
+    usuarioHome.put(usuarioNuevo)
   }
 
   def validarCuenta (codigoValidacion:String) = {
@@ -16,7 +22,11 @@ class UsuarioService {
   }
 
   def ingresarUsuario (userName:String, password:String) : UsuarioEntity = {
-    throw UsuarioNoExiste()
+
+    usuarioHome.findUserByNameAndPassword(userName, password) match {
+      case Some(usuario) => usuario
+      case None => throw UsuarioNoExiste()
+    }
   }
 
   def cambiarPassword (userName:String, password:String, nuevaPassword:String) = {
