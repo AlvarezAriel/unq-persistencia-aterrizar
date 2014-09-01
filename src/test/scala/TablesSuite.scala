@@ -1,4 +1,4 @@
-import edu.unq.persistencia.bussinessExceptions.{CodigoDeValidacionYaUtilizado, UsuarioNoValidado, ValidacionException, BusinessException}
+import edu.unq.persistencia.bussinessExceptions._
 import edu.unq.persistencia.homes.{UsuarioHome, Home}
 import edu.unq.persistencia.mailing.{EnviadorDeMailsMock, EnviadorDeMails}
 import edu.unq.persistencia.model.UsuarioEntity
@@ -14,6 +14,7 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
   implicit var usuariosHome: UsuarioHome =  _
   implicit var usuario: UsuarioEntity = _
   implicit var usuarioService: UsuarioService = _
+  implicit var enviadorDeMailsMock: EnviadorDeMailsMock = _
 
   before {
     DeleteDbFiles.execute("~", "test", true)
@@ -23,10 +24,10 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
 
     usuariosHome = new UsuarioTestHome
     usuario = UsuarioEntity(11, "Juan", "Perez", "dragonlady48", "a@a.a", "1970-10-10", false, "", "pepita")
-
+    enviadorDeMailsMock = new EnviadorDeMailsMock
     usuarioService = new UsuarioService {
       override implicit val usuarioHome: UsuarioHome = usuariosHome
-      override implicit val enviadorDeMails: EnviadorDeMails = new EnviadorDeMailsMock
+      override implicit val enviadorDeMails: EnviadorDeMails = enviadorDeMailsMock
     }
   }
 
@@ -90,6 +91,50 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
       usuarioService.validarCuenta("unasarazainexistente")
     }
     assert(thrown == ValidacionException)
+  }
+
+  test("Si se intenta ingresar un usuario inexistente se lanza UsuarioNoExiste") {
+
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+
+    val thrown = intercept[BusinessException] {
+      usuarioService.ingresarUsuario("UnHombreBueno","1234")
+    }
+    assert(thrown == UsuarioNoExiste)
+  }
+
+  test("Se puede modificar la pass de un usuario") {
+
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+    usuarioService.validarCuenta(usuario.codigoValidacion)
+    val nuevaPassword: String = "nuevapass"
+    usuarioService.cambiarPassword(usuario.username, usuario.password, nuevaPassword)
+
+    val stat:Statement = conection.createStatement()
+    val rs:ResultSet = stat.executeQuery(s"select password from ${usuario.tableName} where username = '${usuario.username}'")
+    rs.next()
+
+    assert(rs.getString("password") === nuevaPassword)
+  }
+
+  test("No se puede modificar la pass de un usuario si la nueva contraseña es igual a la vieja") {
+
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+    usuarioService.validarCuenta(usuario.codigoValidacion)
+
+    assert (intercept[BusinessException]{
+      usuarioService.cambiarPassword(usuario.username, usuario.password, usuario.password)
+    } === NuevaPasswordInvalida)
+
+  }
+
+  test("Al crear un usuario se envía un mail con el código de validación") {
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuarioService.registrarUsuario(usuario)
+    assert( enviadorDeMailsMock.mailEnviado.body.contains(usuario.codigoValidacion) )
   }
 
   after {

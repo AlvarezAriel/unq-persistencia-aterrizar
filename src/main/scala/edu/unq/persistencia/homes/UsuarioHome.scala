@@ -7,6 +7,16 @@ import java.security.SecureRandom
 
 trait UsuarioHome extends Home[UsuarioEntity]{
 
+  def changePassword(entity: UsuarioEntity, nuevaPassword:String) = {
+    val stat:PreparedStatement = conn.prepareStatement(
+      "UPDATE UsuarioEntity SET password = ? WHERE username = ?" //TODO: generalizar el nombre de la tabla
+    )
+    stat.setString(1, nuevaPassword)
+    stat.setString(2, entity.username)
+    stat.executeUpdate()
+    stat.close()
+  }
+
   def findUserByNameAndPassword(username: String, password: String): Option[UsuarioEntity] = {
     val stat:PreparedStatement = conn.prepareStatement(
       "SELECT * FROM UsuarioEntity WHERE username = ? and password = ?;" //TODO: generalizar el nombre de la tabla

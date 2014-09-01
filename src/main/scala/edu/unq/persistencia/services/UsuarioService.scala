@@ -14,7 +14,7 @@ abstract class UsuarioService {
   implicit val usuarioHome: UsuarioHome
   implicit val enviadorDeMails: EnviadorDeMails
 
-  def registrarUsuario ( usuarioNuevo:UsuarioEntity) = {
+  def registrarUsuario ( usuarioNuevo:UsuarioEntity) : UsuarioEntity = {
     usuarioHome.findUserByUsername(usuarioNuevo.username) match {
       case Some(_) => throw UsuarioYaExisteException
       case None =>
@@ -27,6 +27,7 @@ abstract class UsuarioService {
             body = CodigoValidacionEmail.buildBody(usuarioCreado)
           )
         )
+        usuarioCreado
     }
   }
 
@@ -41,18 +42,22 @@ abstract class UsuarioService {
   }
 
   def ingresarUsuario (userName:String, password:String) : UsuarioEntity = {
+    findUserByNameAndPassword(userName, password)
+  }
 
+  def cambiarPassword (userName:String, password:String, nuevaPassword:String) = {
+    val usuario = findUserByNameAndPassword(userName, password)
+    if(usuario.password == nuevaPassword) throw NuevaPasswordInvalida
+    usuarioHome.changePassword(usuario, nuevaPassword)
+  }
+
+  private def findUserByNameAndPassword(userName: String, password: String): UsuarioEntity = {
     usuarioHome.findUserByNameAndPassword(userName, password) match {
       case Some(usuario) => usuario.validado match {
-        case true  => usuario
+        case true => usuario
         case false => throw UsuarioNoValidado
       }
       case None => throw UsuarioNoExiste
     }
   }
-
-  def cambiarPassword (userName:String, password:String, nuevaPassword:String) = {
-    throw NuevaPasswordInvalida
-  }
-
 }
