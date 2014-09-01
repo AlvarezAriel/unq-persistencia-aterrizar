@@ -29,6 +29,6 @@ object UsuarioEntity {
   }
 
   def buildFromList(params:List[Any]) =
-    UsuarioEntity.getClass.getMethods.head.invoke(UsuarioEntity, params map (_.asInstanceOf[AnyRef]): _*).asInstanceOf[UsuarioEntity]
+    UsuarioEntity.getClass.getMethods.find(it => it.getName == "apply").get.invoke(UsuarioEntity, params map (_.asInstanceOf[AnyRef]): _*).asInstanceOf[UsuarioEntity]
 
 }
