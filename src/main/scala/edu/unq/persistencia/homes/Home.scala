@@ -12,7 +12,7 @@ trait Home[T <: Entity[_]] {
     stat.close()
   }
 
-  def put(entidad:T) = {
+  def crearNuevo(entidad:T):T = {
     val stat:Statement = conn.createStatement()
     stat.execute(s"insert into ${entidad.tableName}(${
       entidad.attributesMap.keys.mkString(",")
@@ -21,6 +21,7 @@ trait Home[T <: Entity[_]] {
       entidad.attributesMap.values.map( "'" + _ + "'" ).mkString(",")
     })")
     stat.close()
+    entidad
   }
 
   def all: Seq[T] = Seq.empty[T]

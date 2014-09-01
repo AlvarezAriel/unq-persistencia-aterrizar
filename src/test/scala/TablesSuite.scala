@@ -1,4 +1,6 @@
+import edu.unq.persistencia.bussinessExceptions.{CodigoDeValidacionYaUtilizado, UsuarioNoValidado, ValidacionException, BusinessException}
 import edu.unq.persistencia.homes.{UsuarioHome, Home}
+import edu.unq.persistencia.mailing.{EnviadorDeMailsMock, EnviadorDeMails}
 import edu.unq.persistencia.model.UsuarioEntity
 import edu.unq.persistencia.services.UsuarioService
 import java.sql.{ResultSet, Statement, DriverManager, Connection}
@@ -24,13 +26,14 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
 
     usuarioService = new UsuarioService {
       override implicit val usuarioHome: UsuarioHome = usuariosHome
+      override implicit val enviadorDeMails: EnviadorDeMails = new EnviadorDeMailsMock
     }
   }
 
   test("Se puede guardar un usuario nuevo") {
 
     usuariosHome.createSchemaFor(usuario)
-    usuariosHome.put(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
 
     val stat:Statement = conection.createStatement()
     val rs:ResultSet = stat.executeQuery(s"select * from ${usuario.tableName}")
@@ -43,10 +46,50 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
     stat.close()
   }
 
-  test("Se puede ingresar un usuario") {
+  test("Se puede ingresar un usuario validado") {
     usuariosHome.createSchemaFor(usuario)
-    usuariosHome.put(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+    usuarioService.validarCuenta(usuario.codigoValidacion)
     assert(usuarioService.ingresarUsuario("dragonlady48", "pepita") !== None)
+  }
+
+  test("Si un usuario no validado intenta ingresar, se lanza UsuarioNoValidado") {
+    usuariosHome.createSchemaFor(usuario)
+    usuariosHome.crearNuevo(usuario)
+    assert (
+      intercept[BusinessException]{
+        usuarioService.ingresarUsuario("dragonlady48", "pepita")
+      } === UsuarioNoValidado
+    )
+  }
+  
+  test("Se puede validar un usuario") {
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+    assert(usuarioService.validarCuenta(usuario.codigoValidacion) !== None)
+  }
+
+  test("Si se intenta validar un usuario ya validado se lanza CodigoDeValidacionYaUtilizado") {
+
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+    usuarioService.validarCuenta(usuario.codigoValidacion)
+
+    val thrown = intercept[BusinessException] {
+      usuarioService.validarCuenta(usuario.codigoValidacion)
+    }
+    assert(thrown == CodigoDeValidacionYaUtilizado)
+  }
+
+  test("Si se intenta validar un usuario con un codigo inexistente se lanza ValidacionException") {
+
+    usuariosHome.createSchemaFor(usuario)
+    usuario = usuariosHome.crearNuevo(usuario)
+
+    val thrown = intercept[BusinessException] {
+      usuarioService.validarCuenta("unasarazainexistente")
+    }
+    assert(thrown == ValidacionException)
   }
 
   after {
