@@ -32,6 +32,6 @@ abstract class Entity[A: TypeTag] {
     }
 
   def buildFromList(params:List[Any]) =
-    getClass.getMethods.find(x => x.getName == "apply" && x.isBridge).get.invoke(typeOf[A], params map (_.asInstanceOf[AnyRef]): _*).asInstanceOf[A]
+    this.getClass.getMethods.find(x => x.getName == "apply" && x.isBridge).get.invoke(typeOf[A], params map (_.asInstanceOf[AnyRef]): _*).asInstanceOf[A]
 
 }
