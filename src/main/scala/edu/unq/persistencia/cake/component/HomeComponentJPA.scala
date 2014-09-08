@@ -1,33 +1,29 @@
 package edu.unq.persistencia.cake.component
 
 import edu.unq.persistencia.model.Entity
+import scala.collection.JavaConversions._
+import edu.unq.persistencia.DefaultSessionProviderComponent
 
 trait Query[T] {
   def getResultList:Seq[T]
 }
 
-trait EntityManager {
-  def createQuery[T](q:String, clazz:Class[T]):Query[T]
-  def persist(something:Any)
-}
+trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T] with DefaultSessionProviderComponent {
+  val clazz:Class[T]
 
-class TrivialEntityManager extends EntityManager {
-  override def persist(algo: Any): Unit = 0
+  def locator = new LocatorJPA
+  def updater = new UpdaterJPA
 
-  override def createQuery[T](q: String, clazz: Class[T]): Query[T] = new Query[T] {
-    override def getResultList: Seq[T] = Seq.empty[T]
+  class LocatorJPA extends Locator {
+
+    def findAll = sessionProvider.session.createCriteria(clazz).list.asInstanceOf[List[T]]
+
+//    def myClassOf[Algo:ClassTag] = implicitly[ClassTag[Algo]].runtimeClass
+
   }
-}
 
-trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T] {
-  val em: EntityManager
-  def locator = new LocatorJPA(em)
-  def updater = new UpdaterJPA(em)
+  class UpdaterJPA extends Updater {
+    def save(entity: T) { sessionProvider.em.persist(entity) }
+  }
 
-  class LocatorJPA(val em: EntityManager) extends Locator {
-    def findAll = Seq.empty[T] //em.createQuery("from User", classOf[T]).getResultList
-  }
-  class UpdaterJPA(val em: EntityManager) extends Updater {
-    def save(entity: T) { em.persist(entity) }
-  }
 }

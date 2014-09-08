@@ -3,6 +3,7 @@ package edu.unq.persistencia.bussinessExceptions
 trait BusinessException extends Exception
 
 case object  UsuarioYaExisteException extends BusinessException
+case object  NoSeEncontroElusuarioException extends BusinessException
 case object  ValidacionException extends BusinessException
 case object  CodigoDeValidacionYaUtilizado extends BusinessException
 case object  UsuarioNoExiste extends BusinessException

@@ -4,6 +4,7 @@ import edu.unq.persistencia.model.UsuarioEntity
 import java.sql.{SQLException, PreparedStatement, Statement, Connection}
 import java.math.BigInteger
 import java.security.SecureRandom
+import edu.unq.persistencia.bussinessExceptions.{NoSeEncontroElusuarioException, BusinessException}
 
 trait UsuarioHome extends Home[UsuarioEntity]{
 
@@ -78,6 +79,7 @@ trait UsuarioHome extends Home[UsuarioEntity]{
 
     findUserByUsername(entidad.username) match {
       case Some(u) => u
+      case _ => throw NoSeEncontroElusuarioException
     }
   }
 
