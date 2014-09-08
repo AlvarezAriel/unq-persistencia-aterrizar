@@ -1,10 +1,10 @@
 package edu.unq.persistencia.homes
 
-import edu.unq.persistencia.model.UsuarioEntity
 import java.sql.{SQLException, PreparedStatement, Statement, Connection}
 import java.math.BigInteger
 import java.security.SecureRandom
 import edu.unq.persistencia.bussinessExceptions.{NoSeEncontroElusuarioException, BusinessException}
+import edu.unq.persistencia.model.login.UsuarioEntity
 
 trait UsuarioHome extends Home[UsuarioEntity]{
 

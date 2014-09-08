@@ -1,6 +1,6 @@
 package edu.unq.persistencia.mailing
 
-import edu.unq.persistencia.model.UsuarioEntity
+import edu.unq.persistencia.model.login.UsuarioEntity
 
 trait EnviadorDeMails {
   def enviarMail(mail:Mail)

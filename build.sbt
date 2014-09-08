@@ -11,6 +11,7 @@ libraryDependencies ++= List(
   "org.slf4j" % "slf4j-nop" % "1.6.4",
   "com.h2database" % "h2" % "1.3.170",
   "org.scalatest" %% "scalatest" % "2.0",
+  "com.github.nscala-time" %% "nscala-time"    % "1.4.0",
   "org.hibernate" % "hibernate-core" % "4.3.6.Final",
   "org.hibernate" % "hibernate-entitymanager" % "4.3.6.Final",
   "org.hsqldb" % "hsqldb" % "2.2.8",

@@ -1,6 +1,7 @@
-package edu.unq.persistencia.model
+package edu.unq.persistencia.model.login
 
 import java.sql.ResultSet
+import edu.unq.persistencia.model.Entity
 
 case class UsuarioEntity(
     id:Int,

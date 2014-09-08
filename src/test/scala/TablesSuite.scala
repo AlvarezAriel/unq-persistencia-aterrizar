@@ -1,7 +1,7 @@
 import edu.unq.persistencia.bussinessExceptions._
 import edu.unq.persistencia.homes.{UsuarioHome, Home}
 import edu.unq.persistencia.mailing.{EnviadorDeMailsMock, EnviadorDeMails}
-import edu.unq.persistencia.model.UsuarioEntity
+import edu.unq.persistencia.model.login.UsuarioEntity
 import edu.unq.persistencia.services.UsuarioService
 import java.sql.{ResultSet, Statement, DriverManager, Connection}
 import org.h2.tools.DeleteDbFiles

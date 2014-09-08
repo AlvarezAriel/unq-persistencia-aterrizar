@@ -1,8 +1,8 @@
 package edu.unq.persistencia.cake.component
 
-import edu.unq.persistencia.model.Entity
 import scala.collection.JavaConversions._
 import edu.unq.persistencia.DefaultSessionProviderComponent
+import edu.unq.persistencia.model.Entity
 
 trait Query[T] {
   def getResultList:Seq[T]

@@ -1,8 +1,8 @@
 package edu.unq.persistencia.model
+
 import reflect.runtime.{universe => ru}
 import scala.reflect.runtime.universe._
 abstract class Entity[A: TypeTag] {
-  implicit val id:Int
 
   def fieldSymbols:Iterable[String] = typeOf[A].members.collect{ case m: ru.MethodSymbol if m.isGetter => m }.map{
     it => s"${it.name.toString} ${convertidorDeTipos(it.returnType)}"
