@@ -1,6 +1,6 @@
-import edu.unq.persistencia.cake.component.{HomeComponent, HomeComponentJPA}
+import edu.unq.persistencia.cake.component.HomeComponentJPA
 import edu.unq.persistencia.DefaultSessionProviderComponent
-import edu.unq.persistencia.model.empresa.Asiento
+import edu.unq.persistencia.model.Asiento
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 
 class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter {

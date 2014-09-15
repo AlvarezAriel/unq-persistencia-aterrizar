@@ -5,11 +5,11 @@ import edu.unq.persistencia.model.Entity
 import scala.beans.BeanProperty
 
 case class UsuarioEntity(
-                          @BeanProperty id:Int,
-                          @BeanProperty nombre:String,
-                          @BeanProperty apellido:String,
-                          @BeanProperty username:String,
-                          @BeanProperty email:String,
+                          @BeanProperty var id:Int,
+                          @BeanProperty var nombre:String,
+                          @BeanProperty var apellido:String,
+                          @BeanProperty var username:String,
+                          @BeanProperty var email:String,
     fechaNacimiento:String, /*TODO: mapear date*/
     validado:Boolean,
     codigoValidacion: String,

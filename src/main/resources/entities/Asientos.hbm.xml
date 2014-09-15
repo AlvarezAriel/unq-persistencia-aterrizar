@@ -11,22 +11,22 @@
         <property name="username"/>
     </class>
 
-    <class name="edu.unq.persistencia.model.empresa.Aerolinea" table="Aerolinea">
+    <class name="edu.unq.persistencia.model.Aerolinea" table="Aerolinea">
 
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
 
-        <set name="vuelos" table="employee" inverse="true" lazy="true" fetch="select">
+        <set name="vuelos" table="Vuelo" inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="id" not-null="true" />
             </key>
-            <one-to-many class="edu.unq.persistencia.model.empresa.Vuelo" />
+            <one-to-many class="edu.unq.persistencia.model.Vuelo" />
         </set>
 
     </class>
 
-    <class name="edu.unq.persistencia.model.empresa.Asiento" table="Asiento">
+    <class name="edu.unq.persistencia.model.Asiento" table="Asiento">
         <id name="id" type="java.lang.Long">
             <column name="ID" />
             <generator class="identity" />
@@ -37,22 +37,43 @@
         </property>
     </class>
 
-    <class name="edu.unq.persistencia.model.empresa.Empresa" table="Empresa">
+    <class name="edu.unq.persistencia.model.Empresa" table="Empresa">
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
     </class>
 
-    <class name="edu.unq.persistencia.model.empresa.Tramo" table="Tramo">
+
+    <class name="edu.unq.persistencia.model.Vuelo" table="Vuelo">
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
+
+        <set name="tramos" table="Tramo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id" not-null="true" />
+            </key>
+            <one-to-many class="edu.unq.persistencia.model.Tramo" />
+        </set>
+
     </class>
 
-    <class name="edu.unq.persistencia.model.empresa.Vuelo" table="Vuelo">
+    <class name="edu.unq.persistencia.model.Tramo" table="Tramo">
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
+        <one-to-one name="origen" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
+        <one-to-one name="destino" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
+        <property name="precioBase" type="org.hibernate.type.BigDecimalType"/>
+    </class>
+
+    <class name="edu.unq.persistencia.model.Locacion" table="Locacion">
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" not-null="true" unique="true" />
+        </property>
     </class>
 
 </hibernate-mapping>
