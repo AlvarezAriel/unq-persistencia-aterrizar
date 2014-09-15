@@ -15,13 +15,22 @@ trait SessionProvider {
 }
 
 object ConfiguracionDeDevelopment extends ApplicationConfig {
+  val mappingsPath = "entities/"
   val hibernateConfigTag = "JpaScala"
-  val configuration :Configuration = new Configuration().configure()
+  val configuration :Configuration = {
+    val cfg: Configuration = new Configuration()
+    cfg.addResource(s"${mappingsPath}Mapeos.hbm.xml")
+    cfg.configure()
+  }
+
   val builder:StandardServiceRegistryBuilder  = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties)
   val sessionFactory :SessionFactory = configuration.buildSessionFactory(builder.build())
 }
 
-trait DefaultSessionProviderComponent {
+trait SessionProviderComponent {
+  val sessionProvider:SessionProvider
+}
+trait DefaultSessionProviderComponent extends SessionProviderComponent{
   
   val sessionProvider:SessionProvider = DefaultSessionProvider
   

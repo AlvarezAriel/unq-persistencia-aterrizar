@@ -1,14 +1,16 @@
 package edu.unq.persistencia.cake.component
 
 import scala.collection.JavaConversions._
-import edu.unq.persistencia.DefaultSessionProviderComponent
+import edu.unq.persistencia.{SessionProviderComponent, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model.Entity
 
 trait Query[T] {
   def getResultList:Seq[T]
 }
 
-trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T] with DefaultSessionProviderComponent {
+trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
+  this: SessionProviderComponent =>
+
   val clazz:Class[T]
 
   def locator = new LocatorJPA

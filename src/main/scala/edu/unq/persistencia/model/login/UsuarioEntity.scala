@@ -2,13 +2,14 @@ package edu.unq.persistencia.model.login
 
 import java.sql.ResultSet
 import edu.unq.persistencia.model.Entity
+import scala.beans.BeanProperty
 
 case class UsuarioEntity(
-    id:Int,
-    nombre:String,
-    apellido:String,
-    username:String,
-    email:String,
+                          @BeanProperty id:Int,
+                          @BeanProperty nombre:String,
+                          @BeanProperty apellido:String,
+                          @BeanProperty username:String,
+                          @BeanProperty email:String,
     fechaNacimiento:String, /*TODO: mapear date*/
     validado:Boolean,
     codigoValidacion: String,
