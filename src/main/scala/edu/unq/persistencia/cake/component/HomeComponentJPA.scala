@@ -27,7 +27,7 @@ trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
 
   class UpdaterJPA extends Updater {
     def withTransaction[R](  operation:()=> R ):R = {
-      val transaction: Transaction = sessionProvider.session.getTransaction()
+      val transaction: Transaction = sessionProvider.session.beginTransaction()
       try {
         val r = operation()
         transaction.commit()
@@ -40,7 +40,7 @@ trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
       }
     }
 
-    def save(entity: T) = withTransaction[Unit] { () => save(entity) }
+    def save(entity: T) = withTransaction[Unit] { () => sessionProvider.session.saveOrUpdate(entity) }
 
   }
 
