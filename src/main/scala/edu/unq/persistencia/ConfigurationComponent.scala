@@ -19,8 +19,8 @@ object ConfiguracionDeDevelopment extends ApplicationConfig {
   val hibernateConfigTag = "JpaScala"
   val configuration :Configuration = {
     val cfg: Configuration = new Configuration()
-    cfg.addResource(s"${mappingsPath}Mapeos.hbm.xml")
     cfg.configure()
+//    cfg.addResource(s"${mappingsPath}Asientos.hbm.xml")
   }
 
   val builder:StandardServiceRegistryBuilder  = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties)

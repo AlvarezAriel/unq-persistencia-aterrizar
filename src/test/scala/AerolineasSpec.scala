@@ -15,7 +15,7 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter {
   }
 
   "Encuesta Service, para un año dado, " should "saber la cantidad de ventas totales" in {
-    val asiento: Asiento = new Asiento(1,null,null)
+    val asiento: Asiento = new Asiento(0,1,null,null)
     asientosHome.updater.save(asiento)
   }
 }
