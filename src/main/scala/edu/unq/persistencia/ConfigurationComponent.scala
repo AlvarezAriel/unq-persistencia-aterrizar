@@ -10,7 +10,7 @@ trait ApplicationConfig {
 }
 
 trait SessionProvider {
-  val session :Session
+  def session :Session
 //  val em: EntityManager
 }
 
@@ -37,9 +37,15 @@ trait DefaultSessionProviderComponent extends SessionProviderComponent{
   
   object DefaultSessionProvider extends SessionProvider {
     val sessionFactory :SessionFactory = ConfiguracionDeDevelopment.sessionFactory
-    val session :Session = ConfiguracionDeDevelopment.sessionFactory.getCurrentSession
+    override def session :Session = {
+      if(!ConfiguracionDeDevelopment.sessionFactory.getCurrentSession.isOpen){
+        ConfiguracionDeDevelopment.sessionFactory.openSession()
+      }
+      ConfiguracionDeDevelopment.sessionFactory.getCurrentSession
+    }
+
 //    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory( ConfiguracionDeDevelopment.hibernateConfigTag )
-//    val em: EntityManager = entityManagerFactory.createEntityManager()  
+//    val em: EntityManager = entityManagerFactory.createEntityManager()
   }
   
 }
