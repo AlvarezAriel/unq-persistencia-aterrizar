@@ -4,11 +4,8 @@
         "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
-        <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
-        <property name="hibernate.connection.url">jdbc:hsqldb:hsql://localhost</property>
-        <property name="hibernate.connection.username">sa</property>
-
-        <property name="connection.password"></property>
+        <property name="hibernate.connection.driver_class">org.h2.Driver</property>
+        <property name="hibernate.connection.url">jdbc:h2:~/test</property>
 
         <property name="connection.pool_size">1</property>
 
@@ -21,6 +18,5 @@
 
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="edu.unq.persistencia.model.empresa.Asiento" />
     </session-factory>
 </hibernate-configuration>

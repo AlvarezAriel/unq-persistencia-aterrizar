@@ -20,7 +20,7 @@ object ConfiguracionDeDevelopment extends ApplicationConfig {
   val configuration :Configuration = {
     val cfg: Configuration = new Configuration()
     cfg.configure()
-//    cfg.addResource(s"${mappingsPath}Asientos.hbm.xml")
+    cfg.addResource(s"${mappingsPath}Asientos.hbm.xml")
   }
 
   val builder:StandardServiceRegistryBuilder  = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties)
