@@ -11,7 +11,7 @@ trait ApplicationConfig {
 
 trait SessionProvider {
   val session :Session
-  val em: EntityManager
+//  val em: EntityManager
 }
 
 object ConfiguracionDeDevelopment extends ApplicationConfig {
@@ -19,8 +19,8 @@ object ConfiguracionDeDevelopment extends ApplicationConfig {
   val hibernateConfigTag = "JpaScala"
   val configuration :Configuration = {
     val cfg: Configuration = new Configuration()
-    cfg.configure()
     cfg.addResource(s"${mappingsPath}Asientos.hbm.xml")
+    cfg.configure()
   }
 
   val builder:StandardServiceRegistryBuilder  = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties)
@@ -30,6 +30,7 @@ object ConfiguracionDeDevelopment extends ApplicationConfig {
 trait SessionProviderComponent {
   val sessionProvider:SessionProvider
 }
+
 trait DefaultSessionProviderComponent extends SessionProviderComponent{
   
   val sessionProvider:SessionProvider = DefaultSessionProvider
@@ -37,8 +38,8 @@ trait DefaultSessionProviderComponent extends SessionProviderComponent{
   object DefaultSessionProvider extends SessionProvider {
     val sessionFactory :SessionFactory = ConfiguracionDeDevelopment.sessionFactory
     val session :Session = ConfiguracionDeDevelopment.sessionFactory.getCurrentSession
-    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory( ConfiguracionDeDevelopment.hibernateConfigTag )
-    val em: EntityManager = entityManagerFactory.createEntityManager()  
+//    val entityManagerFactory: EntityManagerFactory = Persistence.createEntityManagerFactory( ConfiguracionDeDevelopment.hibernateConfigTag )
+//    val em: EntityManager = entityManagerFactory.createEntityManager()  
   }
   
 }

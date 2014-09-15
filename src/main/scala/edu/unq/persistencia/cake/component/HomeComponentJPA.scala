@@ -3,6 +3,7 @@ package edu.unq.persistencia.cake.component
 import scala.collection.JavaConversions._
 import edu.unq.persistencia.{SessionProviderComponent, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model.Entity
+import org.hibernate.Transaction
 
 trait Query[T] {
   def getResultList:Seq[T]
@@ -25,7 +26,22 @@ trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
   }
 
   class UpdaterJPA extends Updater {
-    def save(entity: T) { sessionProvider.em.persist(entity) }
+    def withTransaction[R](  operation:()=> R ):R = {
+      val transaction: Transaction = sessionProvider.session.getTransaction()
+      try {
+        val r = operation()
+        transaction.commit()
+        r
+      }
+      catch {
+        case error:Throwable =>
+          transaction.rollback()
+          throw error
+      }
+    }
+
+    def save(entity: T) = withTransaction[Unit] { () => save(entity) }
+
   }
 
 }
