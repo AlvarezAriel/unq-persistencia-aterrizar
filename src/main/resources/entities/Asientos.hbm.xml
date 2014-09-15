@@ -2,6 +2,30 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
+
+    <class name="edu.unq.persistencia.model.login.UsuarioEntity" table="Usuario">
+
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
+        </id>
+        <property name="username"/>
+    </class>
+
+    <class name="edu.unq.persistencia.model.empresa.Aerolinea" table="Aerolinea">
+
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
+        </id>
+
+        <set name="vuelos" table="employee" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id" not-null="true" />
+            </key>
+            <one-to-many class="edu.unq.persistencia.model.empresa.Vuelo" />
+        </set>
+
+    </class>
+
     <class name="edu.unq.persistencia.model.empresa.Asiento" table="Asiento">
         <id name="id" type="java.lang.Long">
             <column name="ID" />
@@ -12,4 +36,23 @@
             <column name="numero" not-null="false" unique="false" />
         </property>
     </class>
+
+    <class name="edu.unq.persistencia.model.empresa.Empresa" table="Empresa">
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
+        </id>
+    </class>
+
+    <class name="edu.unq.persistencia.model.empresa.Tramo" table="Tramo">
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
+        </id>
+    </class>
+
+    <class name="edu.unq.persistencia.model.empresa.Vuelo" table="Vuelo">
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
+        </id>
+    </class>
+
 </hibernate-mapping>
