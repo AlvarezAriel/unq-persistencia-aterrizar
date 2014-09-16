@@ -8,6 +8,7 @@ trait HomeComponentBag[T] extends HomeComponent[T] {
 
   class LocatorBag(val container: scala.collection.mutable.Set[T]) extends Locator {
     def findAll = container.toList
+    def get(id:Long) = container.toSeq.take(id.toInt).head
   }
 
   class UpdaterBag(val container: scala.collection.mutable.Set[T]) extends Updater {

@@ -21,7 +21,6 @@ class Aerolinea( @BeanProperty var vuelos:Seq[Vuelo] ) extends Identificable {
 
 @persistence.Entity
 class Asiento(
-               @BeanProperty var id:Long = 0,
                @BeanProperty var numero:Int,
                @BeanProperty var categoria:Categoria,
                @BeanProperty var usuario:Option[UsuarioEntity]
@@ -36,9 +35,13 @@ class Vuelo (
 class Tramo(
              @BeanProperty var origen     :Locacion,
              @BeanProperty var destino    :Locacion,
-             @BeanProperty var salida     :DateTime,
-             @BeanProperty var llegada    :DateTime,
-             @BeanProperty var precioBase :BigDecimal
-             ) extends Identificable
+             @BeanProperty var salida     :DateTime = DateTime.now(),
+             @BeanProperty var llegada    :DateTime = DateTime.now(),
+             @BeanProperty var precioBase :java.math.BigDecimal
+             ) extends Entity[Asiento]
+
+object Tramo {
+  implicit def intToJavaBigDecimal(entero:Int) = java.math.BigDecimal.valueOf(entero)
+}
 
 class Locacion(@BeanProperty var nombre:String) extends Identificable

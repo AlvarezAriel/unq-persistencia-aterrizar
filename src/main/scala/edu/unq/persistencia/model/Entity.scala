@@ -2,7 +2,7 @@ package edu.unq.persistencia.model
 
 import reflect.runtime.{universe => ru}
 import scala.reflect.runtime.universe._
-abstract class Entity[A: TypeTag] {
+abstract class Entity[A: TypeTag] extends Identificable {
 
   def fieldSymbols:Iterable[String] = typeOf[A].members.collect{ case m: ru.MethodSymbol if m.isGetter => m }.map{
     it => s"${it.name.toString} ${convertidorDeTipos(it.returnType)}"

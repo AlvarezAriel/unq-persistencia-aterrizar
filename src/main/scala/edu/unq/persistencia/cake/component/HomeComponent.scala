@@ -5,6 +5,7 @@ trait HomeComponent[T] {
   def updater : Updater
   trait Locator {
     def findAll: Seq[T]
+    def get(id:Long):T
   }
   trait Updater {
     def save(entity: T)

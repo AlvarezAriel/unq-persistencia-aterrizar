@@ -5,7 +5,6 @@ import edu.unq.persistencia.model.Entity
 import scala.beans.BeanProperty
 
 case class UsuarioEntity(
-                          @BeanProperty var id:Int,
                           @BeanProperty var nombre:String,
                           @BeanProperty var apellido:String,
                           @BeanProperty var username:String,

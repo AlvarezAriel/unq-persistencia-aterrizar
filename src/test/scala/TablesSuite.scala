@@ -23,7 +23,7 @@ class TablesSuite extends FunSuite with BeforeAndAfter {
     class UsuarioTestHome extends UsuarioHome { override val conn: Connection = conection }
 
     usuariosHome = new UsuarioTestHome
-    usuario = UsuarioEntity(11, "Juan", "Perez", "dragonlady48", "a@a.a", "1970-10-10", false, "", "pepita")
+    usuario = UsuarioEntity("Juan", "Perez", "dragonlady48", "a@a.a", "1970-10-10", validado = false, "", "pepita")
     enviadorDeMailsMock = new EnviadorDeMailsMock
     usuarioService = new UsuarioService {
       override implicit val usuarioHome: UsuarioHome = usuariosHome

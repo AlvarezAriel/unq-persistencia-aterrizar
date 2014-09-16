@@ -22,7 +22,7 @@ trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
     def findAll = sessionProvider.session.createCriteria(clazz).list.asInstanceOf[List[T]]
 
 //    def myClassOf[Algo:ClassTag] = implicitly[ClassTag[Algo]].runtimeClass
-
+    def get(id: Long): T = sessionProvider.session.get(clazz, id).asInstanceOf[T]
   }
 
   class UpdaterJPA extends Updater {
