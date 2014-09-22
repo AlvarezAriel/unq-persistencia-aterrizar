@@ -22,8 +22,8 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
     conection = DriverManager.getConnection("jdbc:h2:~/test")
     class UsuarioTestHome extends UsuarioHome { override val conn: Connection = conection }
     usuariosHome = new UsuarioTestHome
-    usuariosHome.dropAndCreateSchemaFor(usuario)
     usuario = UsuarioEntity("Juan", "Perez", "dragonlady48", "a@a.a", "1970-10-10", validado = false, "", "pepita")
+    usuariosHome.dropAndCreateSchemaFor(usuario)
     enviadorDeMailsMock = new EnviadorDeMailsMock
     usuarioService = new UsuarioService {
       override implicit val usuarioHome: UsuarioHome = usuariosHome
@@ -47,14 +47,12 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
   }
 
   test("Se puede ingresar un usuario validado") {
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
     usuarioService.validarCuenta(usuario.codigoValidacion)
     assert(usuarioService.ingresarUsuario("dragonlady48", "pepita") !== None)
   }
 
   test("Si un usuario no validado intenta ingresar, se lanza UsuarioNoValidado") {
-    usuariosHome.createSchemaFor(usuario)
     usuariosHome.crearNuevo(usuario)
     assert (
       intercept[BusinessException]{
@@ -64,14 +62,12 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
   }
   
   test("Se puede validar un usuario") {
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
     assert(usuarioService.validarCuenta(usuario.codigoValidacion) !== None)
   }
 
   test("Si se intenta validar un usuario ya validado se lanza CodigoDeValidacionYaUtilizado") {
 
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
     usuarioService.validarCuenta(usuario.codigoValidacion)
 
@@ -83,7 +79,6 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
 
   test("Si se intenta validar un usuario con un codigo inexistente se lanza ValidacionException") {
 
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
 
     val thrown = intercept[BusinessException] {
@@ -94,7 +89,6 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
 
   test("Si se intenta ingresar un usuario inexistente se lanza UsuarioNoExiste") {
 
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
 
     val thrown = intercept[BusinessException] {
@@ -105,7 +99,6 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
 
   test("Se puede modificar la pass de un usuario") {
 
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
     usuarioService.validarCuenta(usuario.codigoValidacion)
     val nuevaPassword: String = "nuevapass"
@@ -120,7 +113,6 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
 
   test("No se puede modificar la pass de un usuario si la nueva contraseña es igual a la vieja") {
 
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuariosHome.crearNuevo(usuario)
     usuarioService.validarCuenta(usuario.codigoValidacion)
 
@@ -131,7 +123,6 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
   }
 
   test("Al crear un usuario se envía un mail con el código de validación") {
-    usuariosHome.createSchemaFor(usuario)
     usuario = usuarioService.registrarUsuario(usuario)
     assert( enviadorDeMailsMock.mailEnviado.body.contains(usuario.codigoValidacion) )
   }

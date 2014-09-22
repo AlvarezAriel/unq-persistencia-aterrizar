@@ -12,6 +12,13 @@ trait Home[T <: Entity[_]] {
     stat.close()
   }
 
+  def dropAndCreateSchemaFor(entidad:T) = {
+    val stat:Statement = conn.createStatement()
+    stat.execute(s"drop table ${entidad.tableName} if exists")
+    stat.execute(entidad.createSchema)
+    stat.close()
+  }
+
   def crearNuevo(entidad:T):T = {
     val stat:Statement = conn.createStatement()
     stat.execute(s"insert into ${entidad.tableName}(${

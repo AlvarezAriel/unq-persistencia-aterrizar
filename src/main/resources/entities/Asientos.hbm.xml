@@ -19,7 +19,7 @@
 
         <set name="vuelos" table="Vuelo" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="id" not-null="true" />
+                <column name="id" not-null="false" />
             </key>
             <one-to-many class="edu.unq.persistencia.model.Vuelo" />
         </set>
@@ -52,7 +52,7 @@
 
         <set name="tramos" table="Tramo" inverse="true" lazy="true" fetch="select" cascade="all">
             <key>
-                <column name="id" not-null="true" />
+                <column name="tramoId" not-null="false" />
             </key>
             <one-to-many class="edu.unq.persistencia.model.Tramo"/>
         </set>
