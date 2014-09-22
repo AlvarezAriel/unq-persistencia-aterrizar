@@ -36,6 +36,8 @@
         <property name="numero" type="integer">
             <column name="numero" not-null="false" unique="false" />
         </property>
+
+        <property name="categoria" type="edu.unq.persistencia.model.CategoriaMapper"/>
     </class>
 
     <class name="edu.unq.persistencia.model.Empresa" table="Empresa">
