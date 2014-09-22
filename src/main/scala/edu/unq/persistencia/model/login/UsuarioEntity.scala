@@ -1,24 +1,44 @@
 package edu.unq.persistencia.model.login
 
 import java.sql.ResultSet
-import edu.unq.persistencia.model.Entity
+import edu.unq.persistencia.model.{Asiento, Entity}
 import scala.beans.BeanProperty
 import java.lang.reflect.Method
+import org.joda.time.DateTime
 
-case class UsuarioEntity(
-                          @BeanProperty var nombre:String,
-                          @BeanProperty var apellido:String,
-                          @BeanProperty var username:String,
-                          @BeanProperty var email:String,
-    fechaNacimiento:String, /*TODO: mapear date*/
-    validado:Boolean,
-    codigoValidacion: String,
-    password:String
-) extends Entity[UsuarioEntity] {
-
+class UsuarioEntity extends Entity[UsuarioEntity] {
+  @BeanProperty var nombre:String = _
+  @BeanProperty var apellido:String = _
+  @BeanProperty var username:String = _
+  @BeanProperty var email:String = _
+  @BeanProperty var fechaNacimiento:DateTime = _ /*TODO: mapear date*/
+  @BeanProperty var validado:Boolean = _
+  @BeanProperty var codigoValidacion: String = _
+  @BeanProperty var password:String = _
 }
 
 object UsuarioEntity {
+  def apply(nombre:String,
+            apellido:String,
+            username:String,
+            email:String,
+            fechaNacimiento:DateTime,
+            validado:Boolean,
+            codigoValidacion:String,
+            password:String
+  ) = { 
+    val yo = new UsuarioEntity
+    yo.nombre = nombre
+    yo.apellido = apellido
+    yo.username = username
+    yo.email = email
+    yo.fechaNacimiento = fechaNacimiento
+    yo.validado = validado
+    yo.codigoValidacion = codigoValidacion
+    yo.password = password
+    yo
+  }
+  
   def construir(resultSet:ResultSet): Option[UsuarioEntity] = {
     resultSet.first() match {
       case true => Some(

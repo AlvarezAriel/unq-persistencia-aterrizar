@@ -5,10 +5,11 @@ import edu.unq.persistencia.model.login.UsuarioEntity
 import edu.unq.persistencia.services.UsuarioService
 import java.sql.{ResultSet, Statement, DriverManager, Connection}
 import org.h2.tools.DeleteDbFiles
+import org.joda.time.DateTime
 import org.scalatest._
 
 
-class UsuarioSpect extends FunSuite with BeforeAndAfter {
+class UsuarioSpect extends FunSuite with BeforeAndAfter with HomeCreator{
 
   implicit var conection: Connection = _
   implicit var usuariosHome: UsuarioHome =  _
@@ -22,7 +23,7 @@ class UsuarioSpect extends FunSuite with BeforeAndAfter {
     conection = DriverManager.getConnection("jdbc:h2:~/test")
     class UsuarioTestHome extends UsuarioHome { override val conn: Connection = conection }
     usuariosHome = new UsuarioTestHome
-    usuario = UsuarioEntity("Juan", "Perez", "dragonlady48", "a@a.a", "1970-10-10", validado = false, "", "pepita")
+    usuario = UsuarioEntity("Juan", "Perez", "dragonlady48", "a@a.a", DateTime.parse("2014-10-25"), validado = false, "", "pepita")
     usuariosHome.dropAndCreateSchemaFor(usuario)
     enviadorDeMailsMock = new EnviadorDeMailsMock
     usuarioService = new UsuarioService {

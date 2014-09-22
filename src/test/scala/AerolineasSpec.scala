@@ -4,32 +4,25 @@ import edu.unq.persistencia.model.{Entity,Tramo, Locacion, Asiento}
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
 
-class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter {
-  val asientosHome = new HomeComponentJPA[Asiento] with DefaultSessionProviderComponent {override val clazz: Class[Asiento] = classOf[Asiento]}
+class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator{
+  val asientosHome = generateFor (classOf[Asiento])
+  val tramosHome = generateFor (classOf[Tramo])
 
+  before {/*completar con reset de homes*/}
 
-  def homeGenerator[T <: Entity[_]](clase:Class[T]) = {
-    new HomeComponentJPA[T] with DefaultSessionProviderComponent {override val clazz: Class[T] = clase}
-  }
-  before {
-//    asientosHome = new HomeComponentJPA[Asiento] with DefaultSessionProviderComponent {override val clazz: Class[Asiento] = classOf[Asiento]}
-  }
-
-  after {
-
-  }
+  after {}
 
   "Un asiento, " should "puede ser guardado" in {
     val asiento: Asiento = Asiento(1)
-    homeGenerator(classOf[Asiento]).updater.save(asiento)
+    asientosHome.updater.save(asiento)
   }
 
   "Un Tramo, " should "puede ser agregado a un vuelo y guardado" in {
     val origen = Locacion("Buenos Aires")
     val destino = Locacion("Tokyo")
     val tramo = Tramo(origen, destino, precioBase = 50)
-    homeGenerator(classOf[Tramo]).updater.save(tramo)
-    val tramoRecuperado = homeGenerator(classOf[Tramo]).locator.get(tramo.id)
+    tramosHome.updater.save(tramo)
+    val tramoRecuperado = tramosHome.locator.get(tramo.id)
     tramoRecuperado.origen should be equals tramo.origen
   }
 

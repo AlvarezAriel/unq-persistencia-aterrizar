@@ -8,7 +8,15 @@
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
-        <property name="username"/>
+        <property name="nombre" type="string"/>
+        <property name="apellido" type="string"/>
+        <property name="username" type="string"/>
+        <property name="email" type="string"/>
+        <property name="fechaNacimiento" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>
+        <property name="validado" type="boolean"/>
+        <property name="codigoValidacion" type="string"/>
+        <property name="password" type="string"/>
+
     </class>
 
     <class name="edu.unq.persistencia.model.Aerolinea" table="Aerolinea">
@@ -19,7 +27,7 @@
 
         <set name="vuelos" table="Vuelo" inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="id" not-null="false" />
+                <column name="aerolineaId" not-null="false" />
             </key>
             <one-to-many class="edu.unq.persistencia.model.Vuelo" />
         </set>
@@ -36,6 +44,9 @@
         <property name="numero" type="integer">
             <column name="numero" not-null="false" unique="false" />
         </property>
+
+        <many-to-one name="tramo" column="tramoId" class="edu.unq.persistencia.model.Tramo" not-null="false"/>
+        <many-to-one name="pasajero" column="pasajeroId" class="edu.unq.persistencia.model.login.UsuarioEntity" not-null="false"/>
     </class>
 
     <class name="edu.unq.persistencia.model.Empresa" table="Empresa">
@@ -52,7 +63,7 @@
 
         <set name="tramos" table="Tramo" inverse="true" lazy="true" fetch="select" cascade="all">
             <key>
-                <column name="tramoId" not-null="false" />
+                <column name="vueloId" not-null="false" />
             </key>
             <one-to-many class="edu.unq.persistencia.model.Tramo"/>
         </set>
@@ -66,6 +77,12 @@
         <many-to-one name="origen" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
         <many-to-one name="destino" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
         <property name="precioBase" type="org.hibernate.type.BigDecimalType"/>
+        <set name="asientos" table="Asiento" inverse="true" lazy="true" fetch="select" cascade="all">
+            <key>
+                <column name="tramoId" not-null="false" />
+            </key>
+            <one-to-many class="edu.unq.persistencia.model.Asiento"/>
+        </set>
     </class>
 
     <class name="edu.unq.persistencia.model.Locacion" table="Locacion">
