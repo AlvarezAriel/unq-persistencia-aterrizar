@@ -14,32 +14,39 @@ object Business extends Categoria {val factor:BigDecimal = 0.3}
 object Primera extends Categoria  {val factor:BigDecimal = 0.5}
 object Turista extends Categoria  {val factor:BigDecimal = 0.2}
 
-class Aerolinea( @BeanProperty var vuelos:Seq[Vuelo] ) extends Identificable {
+class Aerolinea extends Identificable {
+  @BeanProperty var vuelos:Seq[Vuelo] = _
   //  def getVuelos = vuelos
   //  def setVuelos(vuelos:Seq[Vuelo]) = this.vuelos = vuelos
 }
 
-@persistence.Entity
-class Asiento(
-               @BeanProperty var numero:Int,
-               @BeanProperty var categoria:Categoria,
-               @BeanProperty var usuario:Option[UsuarioEntity]
-               )extends Entity[Asiento]
+class Asiento extends Entity[Asiento] {
+   @BeanProperty var numero:Int = _
+   @BeanProperty var categoria:Categoria = _
+   @BeanProperty var usuario:Option[UsuarioEntity] = _
+}
 
-class Vuelo (
-               @BeanProperty var tramos:Seq[Tramo]
-) extends Identificable {
+class Vuelo extends Identificable {
+  @BeanProperty var tramos:Seq[Tramo] = Seq.empty[Tramo]
   def esDirecto: Boolean = tramos.length == 1
 }
-
+//user type
 class Tramo extends Entity[Asiento] {
-             @BeanProperty var origen     :Locacion = _
-             @BeanProperty var destino    :Locacion = _
-             @BeanProperty var salida     :DateTime = DateTime.now()
-             @BeanProperty var llegada    :DateTime = DateTime.now()
-             @BeanProperty var precioBase :java.math.BigDecimal = _
+  @BeanProperty var origen     :Locacion = _
+  @BeanProperty var destino    :Locacion = _
+  @BeanProperty var salida     :DateTime = DateTime.now()
+  @BeanProperty var llegada    :DateTime = DateTime.now()
+  @BeanProperty var precioBase :java.math.BigDecimal = _
 
 }
+
+class Locacion extends Identificable {@BeanProperty var nombre:String = ""}
+
+
+
+/******************************* COMPANION OBJECTS *************************************/
+
+object Vuelo { def apply(tramos:Seq[Tramo]) = {val esto = new Vuelo();esto.tramos=tramos;esto}}
 
 object Tramo {
   implicit def intToJavaBigDecimal(entero:Int) = java.math.BigDecimal.valueOf(entero)
@@ -47,6 +54,4 @@ object Tramo {
     val esto = new Tramo(); esto.origen = origen; esto.precioBase = precioBase; esto
   }
 }
-
-class Locacion extends Identificable {@BeanProperty var nombre:String = ""}
 object Locacion { def apply(nombre:String) = {val esto = new Locacion;esto.nombre=nombre;esto}}
