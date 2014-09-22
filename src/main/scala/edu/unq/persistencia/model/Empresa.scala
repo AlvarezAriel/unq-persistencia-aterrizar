@@ -25,6 +25,7 @@ class Asiento extends Entity[Asiento] {
    @BeanProperty var categoria:Categoria = _
    @BeanProperty var usuario:Option[UsuarioEntity] = _
 }
+object Asiento { def apply(numero: Int) = {val esto = new Asiento;esto.numero = numero;esto;}}
 
 class Vuelo extends Identificable {
   @BeanProperty var tramos:Seq[Tramo] = Seq.empty[Tramo]

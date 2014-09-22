@@ -20,7 +20,7 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter {
   }
 
   "Un asiento, " should "puede ser guardado" in {
-    val asiento: Asiento = new Asiento(1,null,null)
+    val asiento: Asiento = Asiento(1)
     homeGenerator(classOf[Asiento]).updater.save(asiento)
   }
 
