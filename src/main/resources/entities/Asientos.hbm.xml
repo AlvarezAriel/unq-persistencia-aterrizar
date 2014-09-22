@@ -47,6 +47,7 @@
 
         <many-to-one name="tramo" column="tramoId" class="edu.unq.persistencia.model.Tramo" not-null="false"/>
         <many-to-one name="pasajero" column="pasajeroId" class="edu.unq.persistencia.model.login.UsuarioEntity" not-null="false"/>
+        <property name="categoria" type="edu.unq.persistencia.model.CategoriaMapper"/>
     </class>
 
     <class name="edu.unq.persistencia.model.Empresa" table="Empresa">

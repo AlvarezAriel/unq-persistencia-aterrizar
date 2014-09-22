@@ -9,7 +9,7 @@ trait Identificable {@BeanProperty var id:Long = 0  }
 
 class Empresa(@BeanProperty var aerolineas:mutable.Seq[Aerolinea]) extends Identificable
 
-trait Categoria extends Identificable { val factor:BigDecimal}
+trait Categoria extends Identificable with Serializable { val factor:BigDecimal}
 object Business extends Categoria {val factor:BigDecimal = 0.3}
 object Primera extends Categoria  {val factor:BigDecimal = 0.5}
 object Turista extends Categoria  {val factor:BigDecimal = 0.2}
@@ -58,5 +58,7 @@ object Tramo {
   }
 }
 
-object Asiento { def apply(numero: Int) = {val esto = new Asiento;esto.numero = numero;esto;}}
+object Asiento { def apply(numero: Int) = {val esto = new Asiento;esto.numero = numero;esto;}
+  def apply(numero:Int, categoria: Categoria) : Asiento = { val esto = apply(numero);esto.categoria = categoria;esto }
+}
 object Locacion { def apply(nombre:String) = {val esto = new Locacion;esto.nombre=nombre;esto}}
