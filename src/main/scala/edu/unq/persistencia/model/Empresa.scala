@@ -32,16 +32,21 @@ class Vuelo (
   def esDirecto: Boolean = tramos.length == 1
 }
 
-class Tramo(
-             @BeanProperty var origen     :Locacion,
-             @BeanProperty var destino    :Locacion,
-             @BeanProperty var salida     :DateTime = DateTime.now(),
-             @BeanProperty var llegada    :DateTime = DateTime.now(),
-             @BeanProperty var precioBase :java.math.BigDecimal
-             ) extends Entity[Asiento]
+class Tramo extends Entity[Asiento] {
+             @BeanProperty var origen     :Locacion = _
+             @BeanProperty var destino    :Locacion = _
+             @BeanProperty var salida     :DateTime = DateTime.now()
+             @BeanProperty var llegada    :DateTime = DateTime.now()
+             @BeanProperty var precioBase :java.math.BigDecimal = _
+
+}
 
 object Tramo {
   implicit def intToJavaBigDecimal(entero:Int) = java.math.BigDecimal.valueOf(entero)
+  def apply(origen:Locacion, destino:Locacion, precioBase:java.math.BigDecimal) = {
+    val esto = new Tramo(); esto.origen = origen; esto.precioBase = precioBase; esto
+  }
 }
 
-class Locacion(@BeanProperty var nombre:String) extends Identificable
+class Locacion extends Identificable {@BeanProperty var nombre:String = ""}
+object Locacion { def apply(nombre:String) = {val esto = new Locacion;esto.nombre=nombre;esto}}

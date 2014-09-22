@@ -25,9 +25,9 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter {
   }
 
   "Un Tramo, " should "puede ser agregado a un vuelo y guardado" in {
-    val origen = new Locacion("Buenos Aires")
-    val destino = new Locacion("Tokyo")
-    val tramo = new Tramo(origen=origen,destino=destino,precioBase = 50)
+    val origen = Locacion("Buenos Aires")
+    val destino = Locacion("Tokyo")
+    val tramo = Tramo(origen, destino, precioBase = 50)
     homeGenerator(classOf[Tramo]).updater.save(tramo)
     val tramoRecuperado = homeGenerator(classOf[Tramo]).locator.get(tramo.id)
     tramoRecuperado.origen should be equals tramo.origen
