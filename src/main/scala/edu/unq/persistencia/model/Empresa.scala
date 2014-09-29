@@ -26,10 +26,9 @@ class Asiento extends Entity[Asiento] {
    @BeanProperty var categoria:Categoria = Turista
    @BeanProperty var pasajero: UsuarioEntity = _
    @BeanProperty var tramo:    Tramo = _
-
 }
 
-class Vuelo extends Entity[Vuelo] with Identificable  {
+class Vuelo extends Entity[Vuelo] {
   @BeanProperty var tramos:java.util.Set[Tramo] = Set.empty[Tramo]
   def esDirecto: Boolean = tramos.size() == 1
 }
@@ -46,7 +45,7 @@ class Tramo extends Entity[Tramo] {
 
 }
 
-class Locacion extends Entity[Locacion] with Identificable {@BeanProperty var nombre:String = ""}
+class Locacion extends Entity[Locacion] {@BeanProperty var nombre:String = ""}
 
 /***************************************************************************************/
 /******************************* COMPANION OBJECTS *************************************/

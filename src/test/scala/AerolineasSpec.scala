@@ -1,9 +1,10 @@
 import edu.unq.persistencia.model._
+import fixtures.BasicFixture
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
 import scala.collection.JavaConversions._
 
-class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator{
+class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixture {
   val asientosHome = generateFor (classOf[Asiento])
   val tramosHome = generateFor (classOf[Tramo])
   val vuelosHome = generateFor (classOf[Vuelo])
@@ -39,20 +40,6 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
     val vueloRecuperado = vuelosHome.locator.get(vuelo.id)
     vueloRecuperado.tramos.map(_.id) should contain (tramo.id)
 
-  }
-
-  it should "poder tener asientos" in {
-    val origen = Locacion("Buenos Aires")
-    val destino = Locacion("Tokyo")
-    val tramo = Tramo(origen, destino, precioBase = 50)
-    tramo.asientos.add()
-    tramosHome.updater.save(tramo)
-    val tramoRecuperado = tramosHome.locator.get(tramo.id)
-
-
-
-
-    tramoRecuperado.origen should be equals tramo.origen
   }
 
 
