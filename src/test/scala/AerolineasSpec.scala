@@ -1,6 +1,4 @@
-import edu.unq.persistencia.cake.component.HomeComponentJPA
-import edu.unq.persistencia.DefaultSessionProviderComponent
-import edu.unq.persistencia.model.{Entity,Tramo, Locacion, Asiento}
+import edu.unq.persistencia.model.{Tramo, Locacion, Asiento}
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
 
@@ -17,7 +15,7 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
     asientosHome.updater.save(asiento)
   }
 
-  "Un Tramo, " should "puede ser agregado a un vuelo y guardado" in {
+  "Un Tramo, " should "ser agregado a un vuelo y guardado" in {
     val origen = Locacion("Buenos Aires")
     val destino = Locacion("Tokyo")
     val tramo = Tramo(origen, destino, precioBase = 50)
@@ -25,6 +23,22 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
     val tramoRecuperado = tramosHome.locator.get(tramo.id)
     tramoRecuperado.origen should be equals tramo.origen
   }
+
+  it should "poder tener asientos" in {
+    val origen = Locacion("Buenos Aires")
+    val destino = Locacion("Tokyo")
+    val tramo = Tramo(origen, destino, precioBase = 50)
+    tramo.asientos.add()
+    tramosHome.updater.save(tramo)
+    val tramoRecuperado = tramosHome.locator.get(tramo.id)
+
+
+
+
+    tramoRecuperado.origen should be equals tramo.origen
+  }
+
+
 
 
 }
