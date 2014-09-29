@@ -19,27 +19,17 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
   }
 
   "Un Tramo, " should "ser agregado a un vuelo y guardado" in {
-    val origen = Locacion("Buenos Aires")
-    val destino = Locacion("Tokyo")
-    val tramo = Tramo(origen, destino, precioBase = 50)
     tramosHome.updater.save(tramo)
     val tramoRecuperado = tramosHome.locator.get(tramo.id)
     tramoRecuperado.origen should be equals tramo.origen
   }
 
   "Un Vuelo, " should  "guardado con un tramo, al ser recuperado conserva sus tramos" in {
-    val vuelo = Vuelo(Set.empty[Tramo])
-    vuelosHome.updater.save(vuelo)
-
-    val origen = Locacion("Rio")
-    val destino = Locacion("Paris")
-    val tramo = Tramo(origen, destino, precioBase = 50)
-    tramo.vuelo = vuelo
+    vuelosHome.updater.save(vueloEmpty)
+    tramo.vuelo = vueloEmpty
     tramosHome.updater.save(tramo)
-
-    val vueloRecuperado = vuelosHome.locator.get(vuelo.id)
+    val vueloRecuperado = vuelosHome.locator.get(vueloEmpty.id)
     vueloRecuperado.tramos.map(_.id) should contain (tramo.id)
-
   }
 
 
