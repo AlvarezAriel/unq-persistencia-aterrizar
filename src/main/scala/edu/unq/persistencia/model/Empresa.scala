@@ -29,7 +29,7 @@ class Asiento extends Entity[Asiento] {
 
 }
 
-class Vuelo extends Identificable {
+class Vuelo extends Entity[Vuelo] with Identificable  {
   @BeanProperty var tramos:java.util.Set[Tramo] = Set.empty[Tramo]
   def esDirecto: Boolean = tramos.size() == 1
 }
@@ -41,10 +41,12 @@ class Tramo extends Entity[Tramo] {
   @BeanProperty var llegada    :DateTime = DateTime.now()
   @BeanProperty var precioBase :java.math.BigDecimal = _
   @BeanProperty var asientos   :java.util.Set[Asiento] = Set.empty[Asiento]
+  @BeanProperty var vuelo   :Vuelo = _
+
 
 }
 
-class Locacion extends Identificable {@BeanProperty var nombre:String = ""}
+class Locacion extends Entity[Locacion] with Identificable {@BeanProperty var nombre:String = ""}
 
 /***************************************************************************************/
 /******************************* COMPANION OBJECTS *************************************/

@@ -1,10 +1,12 @@
-import edu.unq.persistencia.model.{Tramo, Locacion, Asiento}
+import edu.unq.persistencia.model._
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
+import scala.collection.JavaConversions._
 
 class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator{
   val asientosHome = generateFor (classOf[Asiento])
   val tramosHome = generateFor (classOf[Tramo])
+  val vuelosHome = generateFor (classOf[Vuelo])
 
   before {/*completar con reset de homes*/}
 
@@ -22,6 +24,21 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
     tramosHome.updater.save(tramo)
     val tramoRecuperado = tramosHome.locator.get(tramo.id)
     tramoRecuperado.origen should be equals tramo.origen
+  }
+
+  "Un Vuelo, " should  "guardado con un tramo, al ser recuperado conserva sus tramos" in {
+    val vuelo = Vuelo(Set.empty[Tramo])
+    vuelosHome.updater.save(vuelo)
+
+    val origen = Locacion("Rio")
+    val destino = Locacion("Paris")
+    val tramo = Tramo(origen, destino, precioBase = 50)
+    tramo.vuelo = vuelo
+    tramosHome.updater.save(tramo)
+
+    val vueloRecuperado = vuelosHome.locator.get(vuelo.id)
+    vueloRecuperado.tramos.map(_.id) should contain (tramo.id)
+
   }
 
   it should "poder tener asientos" in {

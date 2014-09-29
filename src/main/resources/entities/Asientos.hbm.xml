@@ -62,7 +62,7 @@
             <generator class="native" />
         </id>
 
-        <set name="tramos" table="Tramo" inverse="true" lazy="true" fetch="select" cascade="all">
+        <set name="tramos" table="Tramo" inverse="true" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="vueloId" not-null="false" />
             </key>
@@ -77,8 +77,9 @@
         </id>
         <many-to-one name="origen" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
         <many-to-one name="destino" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
+        <many-to-one name="vuelo" class="edu.unq.persistencia.model.Vuelo" cascade="save-update" column="vueloId"/>
         <property name="precioBase" type="org.hibernate.type.BigDecimalType"/>
-        <set name="asientos" table="Asiento" inverse="true" lazy="true" fetch="select" cascade="all">
+        <set name="asientos" table="Asiento" inverse="true" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="tramoId" not-null="false" />
             </key>
