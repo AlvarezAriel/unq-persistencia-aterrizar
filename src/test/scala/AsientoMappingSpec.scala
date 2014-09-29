@@ -30,10 +30,8 @@ class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter wit
     home.updater.save(asientoPrimera)
     val asientoPrimeraGuardado: Asiento = home.locator.get(asientoPrimera.id)
     asientoPrimeraGuardado.categoria should be equals model.Primera
-
-
-
   }
+
 
 
 }

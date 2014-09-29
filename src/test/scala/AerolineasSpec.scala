@@ -32,6 +32,13 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
     vueloRecuperado.tramos.map(_.id) should contain (tramo.id)
   }
 
+  "Una Aerolinea, " should "conoce sus vuelos" in {
+
+
+    aerolineaLan.vuelos.add(vueloEmpty)
+
+  }
+
 
 
 

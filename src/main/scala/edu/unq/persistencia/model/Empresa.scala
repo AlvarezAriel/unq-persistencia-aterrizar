@@ -8,7 +8,7 @@ import scala.collection.JavaConversions._
 
 trait Identificable {@BeanProperty var id:Long = 0  }
 
-class Empresa(@BeanProperty var aerolineas:java.util.Set[Aerolinea]) extends Identificable
+//class Empresa(@BeanProperty var aerolineas:java.util.Set[Aerolinea]) extends Identificable
 
 trait Categoria extends Identificable with Serializable { val factor:BigDecimal}
 object Business extends Categoria {val factor:BigDecimal = 0.3}
@@ -16,9 +16,8 @@ object Primera extends Categoria  {val factor:BigDecimal = 0.5}
 object Turista extends Categoria  {val factor:BigDecimal = 0.2}
 
 class Aerolinea extends Identificable {
-  @BeanProperty var vuelos:java.util.Set[Vuelo] = _
-  //  def getVuelos = vuelos
-  //  def setVuelos(vuelos:Seq[Vuelo]) = this.vuelos = vuelos
+  @BeanProperty var vuelos:java.util.Set[Vuelo] = Set.empty[Vuelo]
+  @BeanProperty var nombre:String = ""
 }
 
 class Asiento extends Entity[Asiento] {
@@ -30,6 +29,7 @@ class Asiento extends Entity[Asiento] {
 
 class Vuelo extends Entity[Vuelo] {
   @BeanProperty var tramos:java.util.Set[Tramo] = Set.empty[Tramo]
+  @BeanProperty var aerolinea:Aerolinea = _
   def esDirecto: Boolean = tramos.size() == 1
 }
 
