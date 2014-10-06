@@ -1,11 +1,18 @@
 import edu.unq.persistencia.cake.component.HomeComponentJPA
 import edu.unq.persistencia.{model, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model._
+import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
 
-class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator {
+class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer {
   val asientosHome = new HomeComponentJPA[Asiento] with DefaultSessionProviderComponent {override val clazz: Class[Asiento] = classOf[Asiento]}
+  var fixture:BasicFixture = _
+
+  before {
+    fixture = BasicFixture()
+//    asientosHome.updater.deleteAll
+  }
 
   "Un asiento, " should "puede ser guardado" in {
     val asiento = Asiento(1)
@@ -13,25 +20,26 @@ class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter wit
   }
 
   it should "guardado con una categoria, al ser recuperado conserva su categoria" in{
-    val asientoBusiness = Asiento(1, Business)
-    val asientoTurista = Asiento(2, Turista)
-    val asientoPrimera = Asiento(3, Primera)
-
     val home = generateFor(classOf[Asiento])
 
-    home.updater.save(asientoBusiness)
-    val asientoBusinessGuardado: Asiento = home.locator.get(asientoBusiness.id)
+    home.updater.save(fixture.asientoBusiness)
+    val asientoBusinessGuardado: Asiento = home.locator.get(fixture.asientoBusiness.id)
     asientoBusinessGuardado.categoria should be equals model.Business
 
-    home.updater.save(asientoTurista)
-    val asientoTuristaGuardado: Asiento = home.locator.get(asientoTurista.id)
+    home.updater.save(fixture.asientoTurista)
+    val asientoTuristaGuardado: Asiento = home.locator.get(fixture.asientoTurista.id)
     asientoTuristaGuardado.categoria should be equals model.Turista
 
-    home.updater.save(asientoPrimera)
-    val asientoPrimeraGuardado: Asiento = home.locator.get(asientoPrimera.id)
+    home.updater.save(fixture.asientoPrimera)
+    val asientoPrimeraGuardado: Asiento = home.locator.get(fixture.asientoPrimera.id)
     asientoPrimeraGuardado.categoria should be equals model.Primera
   }
 
+  it should " puede ser asignado a un usuario" in{
 
+    asientosHome.updater.save(fixture.asientoBusiness)
+    val asientoBusinessGuardado: Asiento = asientosHome.locator.get(fixture.asientoBusiness.id)
+
+  }
 
 }

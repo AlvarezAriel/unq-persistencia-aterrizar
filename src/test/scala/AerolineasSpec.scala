@@ -1,16 +1,21 @@
 import edu.unq.persistencia.model._
-import fixtures.BasicFixture
+import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
 import scala.collection.JavaConversions._
 
-class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixture {
+class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer {
   val asientosHome = generateFor (classOf[Asiento])
   val tramosHome = generateFor (classOf[Tramo])
   val vuelosHome = generateFor (classOf[Vuelo])
   val aerolineasHome = generateFor (classOf[Aerolinea])
 
-  before {/*completar con reset de homes*/}
+  var fixture:BasicFixture = _
+
+  before {
+    fixture = BasicFixture()
+    //    asientosHome.updater.deleteAll
+  }
 
   after {}
 
@@ -20,28 +25,28 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
   }
 
   "Un Tramo, " should "ser agregado a un vuelo y guardado" in {
-    tramosHome.updater.save(tramo)
-    val tramoRecuperado = tramosHome.locator.get(tramo.id)
-    tramoRecuperado.origen should be equals tramo.origen
+    tramosHome.updater.save(fixture.tramo)
+    val tramoRecuperado = tramosHome.locator.get(fixture.tramo.id)
+    tramoRecuperado.origen should be equals fixture.tramo.origen
   }
 
   "Un Vuelo, " should  "guardado con un tramo, al ser recuperado conserva sus tramos" in {
-    vuelosHome.updater.save(vueloEmpty)
-    tramo.vuelo = vueloEmpty
-    tramosHome.updater.save(tramo)
-    val vueloRecuperado = vuelosHome.locator.get(vueloEmpty.id)
-    vueloRecuperado.tramos.map(_.id) should contain (tramo.id)
+    vuelosHome.updater.save(fixture.vueloEmpty)
+    fixture.tramo.vuelo = fixture.vueloEmpty
+    tramosHome.updater.save(fixture.tramo)
+    val vueloRecuperado = vuelosHome.locator.get(fixture.vueloEmpty.id)
+    vueloRecuperado.tramos.map(_.id) should contain (fixture.tramo.id)
   }
 
   "Una Aerolinea, " should "conoce sus vuelos" in {
 
 
-    aerolineasHome.updater.save(aerolineaLan)
-    vueloEmpty.aerolinea = aerolineaLan
-    vuelosHome.updater.save(vueloEmpty)
+    aerolineasHome.updater.save(fixture.aerolineaLan)
+    fixture.vueloEmpty.aerolinea = fixture.aerolineaLan
+    vuelosHome.updater.save(fixture.vueloEmpty)
 
-    val aerolineaRecuperada = aerolineasHome.locator.get(aerolineaLan.id)
-    aerolineaRecuperada.vuelos.map(_.id) should contain (vueloEmpty.id)
+    val aerolineaRecuperada = aerolineasHome.locator.get(fixture.aerolineaLan.id)
+    aerolineaRecuperada.vuelos.map(_.id) should contain (fixture.vueloEmpty.id)
   }
 
 

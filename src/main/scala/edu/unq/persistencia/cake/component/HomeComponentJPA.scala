@@ -46,6 +46,11 @@ trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
 
     def save(entity: T) = withTransaction { () => sessionProvider.session.saveOrUpdate(entity) }
 
+    val deleteAll = withTransaction { () =>
+      val hql:String  = String.format("delete from %s",clazz.getSimpleName)
+      sessionProvider.session.createQuery(hql).executeUpdate()
+    }
+
   }
 
 }

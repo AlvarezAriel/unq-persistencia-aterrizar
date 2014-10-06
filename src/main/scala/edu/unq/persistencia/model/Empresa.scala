@@ -6,7 +6,7 @@ import scala.collection._
 import org.joda.time.DateTime
 import scala.collection.JavaConversions._
 
-trait Identificable {@BeanProperty var id:Long = 0  }
+trait Identificable {@BeanProperty var id:Long = _ }
 
 //class Empresa(@BeanProperty var aerolineas:java.util.Set[Aerolinea]) extends Identificable
 
