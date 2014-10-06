@@ -12,7 +12,7 @@
         <property name="apellido" type="string"/>
         <property name="username" type="string"/>
         <property name="email" type="string"/>
-        <property name="fechaNacimiento" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>
+        <!--<property name="fechaNacimiento" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>-->
         <property name="validado" type="boolean"/>
         <property name="codigoValidacion" type="string"/>
         <property name="password" type="string"/>
@@ -21,7 +21,7 @@
 
     <class name="edu.unq.persistencia.model.Aerolinea" table="Aerolinea">
 
-        <id name="id" type="java.lang.Long" >
+        <id name="id" type="java.lang.Long">
             <generator class="native" />
         </id>
 
@@ -37,8 +37,7 @@
 
     <class name="edu.unq.persistencia.model.Asiento" table="Asiento">
         <id name="id" type="java.lang.Long">
-            <column name="ID" />
-            <generator class="identity" />
+            <generator class="native" />
         </id>
 
         <property name="numero" type="integer">
@@ -46,7 +45,7 @@
         </property>
 
         <many-to-one name="tramo" column="tramoId" class="edu.unq.persistencia.model.Tramo" not-null="false"/>
-        <many-to-one name="pasajero" column="pasajeroId" class="edu.unq.persistencia.model.login.UsuarioEntity" not-null="false"/>
+        <many-to-one name="pasajero" column="pasajeroId" class="edu.unq.persistencia.model.login.UsuarioEntity" lazy="false" not-null="false"/>
         <property name="categoria" type="edu.unq.persistencia.model.CategoriaMapper"/>
     </class>
 

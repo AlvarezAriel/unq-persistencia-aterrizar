@@ -1,4 +1,5 @@
 import edu.unq.persistencia.cake.component.HomeComponentJPA
+import edu.unq.persistencia.model.login.UsuarioEntity
 import edu.unq.persistencia.{model, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model._
 import fixtures.BasicFixtureContainer
@@ -6,7 +7,8 @@ import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import edu.unq.persistencia.model.Tramo._
 
 class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer {
-  val asientosHome = new HomeComponentJPA[Asiento] with DefaultSessionProviderComponent {override val clazz: Class[Asiento] = classOf[Asiento]}
+  val asientosHome = generateFor(classOf[Asiento])
+  val usuariosHome = generateFor(classOf[UsuarioEntity])
   var fixture:BasicFixture = _
 
   before {
@@ -36,9 +38,15 @@ class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter wit
   }
 
   it should " puede ser asignado a un usuario" in{
-
+    usuariosHome.updater.save(fixture.usuarioPepe)
+    fixture.asientoBusiness.pasajero = fixture.usuarioPepe
     asientosHome.updater.save(fixture.asientoBusiness)
-    val asientoBusinessGuardado: Asiento = asientosHome.locator.get(fixture.asientoBusiness.id)
+
+    val asientoRecuperado = asientosHome.locator.get(fixture.asientoBusiness.id)
+//    usuariosHome.withTransaction { () =>
+      asientoRecuperado.pasajero.id should be equals fixture.usuarioPepe.id
+//    }
+
 
   }
 

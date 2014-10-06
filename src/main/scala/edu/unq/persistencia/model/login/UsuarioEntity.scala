@@ -7,11 +7,11 @@ import java.lang.reflect.Method
 import org.joda.time.DateTime
 
 class UsuarioEntity extends Entity[UsuarioEntity] {
-  @BeanProperty var nombre:String = _
-  @BeanProperty var apellido:String = _
-  @BeanProperty var username:String = _
-  @BeanProperty var email:String = _
-  @BeanProperty var fechaNacimiento:DateTime = _ /*TODO: mapear date*/
+  @BeanProperty var nombre:String = ""
+  @BeanProperty var apellido:String = ""
+  @BeanProperty var username:String = ""
+  @BeanProperty var email:String = ""
+  @BeanProperty var fechaNacimiento:DateTime = DateTime.now()
   @BeanProperty var validado:Boolean = _
   @BeanProperty var codigoValidacion: String = _
   @BeanProperty var password:String = _
