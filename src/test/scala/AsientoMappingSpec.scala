@@ -1,12 +1,11 @@
-import edu.unq.persistencia.cake.component.HomeComponentJPA
+import edu.unq.persistencia.cake.component.DBAction
 import edu.unq.persistencia.model.login.UsuarioEntity
 import edu.unq.persistencia.{model, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model._
 import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
-import edu.unq.persistencia.model.Tramo._
 
-class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer {
+class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer with DefaultSessionProviderComponent {
   val asientosHome = generateFor(classOf[Asiento])
   val usuariosHome = generateFor(classOf[UsuarioEntity])
   var fixture:BasicFixture = _
@@ -16,12 +15,12 @@ class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter wit
 //    asientosHome.updater.deleteAll
   }
 
-  "Un asiento, " should "puede ser guardado" in {
+  "Un asiento, " should "puede ser guardado" in DBAction.withSession { implicit session =>
     val asiento = Asiento(1)
     generateFor(classOf[Asiento]).updater.save(asiento)
   }
 
-  it should "guardado con una categoria, al ser recuperado conserva su categoria" in{
+  it should "guardado con una categoria, al ser recuperado conserva su categoria" in DBAction.withSession { implicit session =>
     val home = generateFor(classOf[Asiento])
 
     home.updater.save(fixture.asientoBusiness)
@@ -37,15 +36,13 @@ class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter wit
     asientoPrimeraGuardado.categoria should be equals model.Primera
   }
 
-  it should " puede ser asignado a un usuario" in{
+  it should " puede ser asignado a un usuario" in DBAction.withSession { implicit session =>
     usuariosHome.updater.save(fixture.usuarioPepe)
     fixture.asientoBusiness.pasajero = fixture.usuarioPepe
     asientosHome.updater.save(fixture.asientoBusiness)
 
     val asientoRecuperado = asientosHome.locator.get(fixture.asientoBusiness.id)
-//    usuariosHome.withTransaction { () =>
-      asientoRecuperado.pasajero.id should be equals fixture.usuarioPepe.id
-//    }
+    asientoRecuperado.pasajero.id should be equals fixture.usuarioPepe.id
 
 
   }

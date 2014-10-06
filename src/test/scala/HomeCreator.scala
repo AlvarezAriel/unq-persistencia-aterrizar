@@ -4,6 +4,6 @@ import edu.unq.persistencia.model.Entity
 
 trait HomeCreator {
   def generateFor[T <: Entity[_]](clase:Class[T]) = {
-    new HomeComponentJPA[T] with DefaultSessionProviderComponent {override val clazz: Class[T] = clase}
+    new HomeComponentJPA[T] {override val clazz: Class[T] = clase}
   }
 }

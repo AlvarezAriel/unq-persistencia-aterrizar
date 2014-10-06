@@ -10,3 +10,8 @@ case object  UsuarioNoExiste extends BusinessException
 case object  UsuarioNoValidado extends BusinessException
 case object  NuevaPasswordInvalida extends BusinessException
 case object  EnviarMailException extends BusinessException
+case object  AsientoYaReservado extends BusinessException
+
+case class Assert(condition:Boolean){
+  def using(e:BusinessException) = if(!condition) throw e
+}

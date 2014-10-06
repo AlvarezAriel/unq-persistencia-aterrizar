@@ -33,7 +33,7 @@ trait SessionProviderComponent {
 
 trait DefaultSessionProviderComponent extends SessionProviderComponent{
   
-  val sessionProvider:SessionProvider = DefaultSessionProvider
+  implicit val sessionProvider:SessionProvider = DefaultSessionProvider
   
   object DefaultSessionProvider extends SessionProvider {
     val sessionFactory :SessionFactory = ConfiguracionDeDevelopment.sessionFactory

@@ -16,7 +16,7 @@ object Primera extends Categoria  {val factor:BigDecimal = 0.5}
 object Turista extends Categoria  {val factor:BigDecimal = 0.2}
 
 class Aerolinea extends Entity[Aerolinea] {
-  @BeanProperty var vuelos:java.util.Set[Vuelo] = Set.empty[Vuelo]
+  @BeanProperty var vuelos:java.util.Set[Vuelo] = mutable.Set.empty[Vuelo]
   @BeanProperty var nombre:String = ""
 }
 
@@ -25,10 +25,13 @@ class Asiento extends Entity[Asiento] {
    @BeanProperty var categoria:Categoria = Turista
    @BeanProperty var pasajero: UsuarioEntity = _
    @BeanProperty var tramo:    Tramo = _
+
+  def reservado = pasajero != null
+  def libre = !reservado
 }
 
 class Vuelo extends Entity[Vuelo] {
-  @BeanProperty var tramos:java.util.Set[Tramo] = Set.empty[Tramo]
+  @BeanProperty var tramos:java.util.Set[Tramo] = mutable.Set.empty[Tramo]
   @BeanProperty var aerolinea:Aerolinea = _
   def esDirecto: Boolean = tramos.size() == 1
 }
@@ -39,7 +42,7 @@ class Tramo extends Entity[Tramo] {
   @BeanProperty var salida     :DateTime = DateTime.now()
   @BeanProperty var llegada    :DateTime = DateTime.now()
   @BeanProperty var precioBase :java.math.BigDecimal = _
-  @BeanProperty var asientos   :java.util.Set[Asiento] = Set.empty[Asiento]
+  @BeanProperty var asientos   :java.util.Set[Asiento] = mutable.Set.empty[Asiento]
   @BeanProperty var vuelo   :Vuelo = _
 
 

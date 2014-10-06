@@ -25,7 +25,7 @@
             <generator class="native" />
         </id>
 
-        <set name="vuelos" table="Vuelo" inverse="true" lazy="false" fetch="select">
+        <set name="vuelos" table="Vuelo" inverse="true"  fetch="select">
             <key>
                 <column name="aerolineaId" not-null="false" />
             </key>
@@ -45,7 +45,7 @@
         </property>
 
         <many-to-one name="tramo" column="tramoId" class="edu.unq.persistencia.model.Tramo" not-null="false"/>
-        <many-to-one name="pasajero" column="pasajeroId" class="edu.unq.persistencia.model.login.UsuarioEntity" lazy="false" not-null="false"/>
+        <many-to-one name="pasajero" column="pasajeroId" class="edu.unq.persistencia.model.login.UsuarioEntity"  not-null="false"/>
         <property name="categoria" type="edu.unq.persistencia.model.CategoriaMapper"/>
     </class>
 
@@ -62,7 +62,7 @@
         </id>
         <many-to-one name="aerolinea" column="aerolineaId" class="edu.unq.persistencia.model.Aerolinea" not-null="false"/>
 
-        <set name="tramos" table="Tramo" inverse="true" lazy="false" fetch="select" cascade="all">
+        <set name="tramos" table="Tramo" inverse="true"  fetch="select" cascade="all">
             <key>
                 <column name="vueloId" not-null="false" />
             </key>
@@ -82,7 +82,7 @@
         <property name="precioBase" type="org.hibernate.type.BigDecimalType"/>
         <property name="llegada" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
         <property name="salida" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
-        <set name="asientos" table="Asiento" inverse="true" lazy="false" fetch="select" cascade="all">
+        <set name="asientos" table="Asiento" inverse="true" fetch="select" cascade="all">
             <key>
                 <column name="tramoId" not-null="false" />
             </key>
@@ -95,7 +95,7 @@
             <generator class="native" />
         </id>
         <property name="nombre" type="string">
-            <column name="nombre" not-null="true" unique="true" />
+            <column name="nombre" not-null="true" />
         </property>
     </class>
 

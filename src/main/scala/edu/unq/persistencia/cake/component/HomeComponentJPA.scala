@@ -1,26 +1,19 @@
 package edu.unq.persistencia.cake.component
 
 import scala.collection.JavaConversions._
-import edu.unq.persistencia.{SessionProviderComponent, DefaultSessionProviderComponent}
+import edu.unq.persistencia.{SessionProvider, SessionProviderComponent, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model.Entity
-import org.hibernate.Transaction
+import org.hibernate.{Session, Transaction}
 
 trait Query[T] {
   def getResultList:Seq[T]
 }
 
-trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
-  this: SessionProviderComponent =>
-
-  val clazz:Class[T]
-
-  def locator = new LocatorJPA
-  def updater = new UpdaterJPA
-
-  def withTransaction[R](  operation:()=> R ):R = {
+object DBAction {
+  def withSession[R]( action:((Session)=> R) )(implicit sessionProvider:SessionProvider) = {
     val transaction: Transaction = sessionProvider.session.beginTransaction()
     try {
-      val r = operation()
+      val r = action.apply(sessionProvider.session)
       transaction.commit()
       r
     }
@@ -30,25 +23,29 @@ trait HomeComponentJPA[T <: Entity[_]] extends HomeComponent[T]  {
         throw error
     }
   }
+}
 
-  class LocatorJPA extends Locator {
+trait HomeComponentJPA[T <: Entity[_]] {
+  val clazz:Class[T]
 
-    def findAll = withTransaction { () => sessionProvider.session.createCriteria(clazz).list.asInstanceOf[List[T]]}
+  def locator = new LocatorJPA
+  def updater = new UpdaterJPA
+
+  class LocatorJPA {
+
+    def findAll(implicit session:Session) = session.createCriteria(clazz).list.asInstanceOf[List[T]]
 
 //    def myClassOf[Algo:ClassTag] = implicitly[ClassTag[Algo]].runtimeClass
-    def get(id: Long): T = withTransaction { () =>
-      sessionProvider.session.get(clazz, id).asInstanceOf[T]
-    }
+    def get(id:Long)(implicit session:Session): T = session.get(clazz, id).asInstanceOf[T]
   }
 
-  class UpdaterJPA extends Updater {
+  class UpdaterJPA {
 
+    def save(entity: T)(implicit session:Session) = session.saveOrUpdate(entity)
 
-    def save(entity: T) = withTransaction { () => sessionProvider.session.saveOrUpdate(entity) }
-
-    val deleteAll = withTransaction { () =>
+    def deleteAll(implicit session:Session) = {
       val hql:String  = String.format("delete from %s",clazz.getSimpleName)
-      sessionProvider.session.createQuery(hql).executeUpdate()
+      session.createQuery(hql).executeUpdate()
     }
 
   }

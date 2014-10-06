@@ -4,6 +4,7 @@ import edu.unq.persistencia.model._
 import scala.collection.JavaConversions._
 import edu.unq.persistencia.model.login.UsuarioEntity
 import org.joda.time.DateTime
+import scala.collection._
 
 trait BasicFixtureContainer {
   case class BasicFixture(){
@@ -12,7 +13,7 @@ trait BasicFixtureContainer {
     val origenBuenosAires = Locacion("Buenos Aires")
     val destinoTokyo = Locacion("Tokyo")
     val tramo = Tramo(origenBuenosAires, destinoTokyo, precioBase = 50)
-    val vueloEmpty = Vuelo(Set.empty[Tramo])
+    val vueloEmpty = Vuelo(mutable.Set.empty[Tramo])
     val aerolineaLan = new Aerolinea
     aerolineaLan.nombre = "LAN"
 
