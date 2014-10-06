@@ -8,6 +8,7 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
   val asientosHome = generateFor (classOf[Asiento])
   val tramosHome = generateFor (classOf[Tramo])
   val vuelosHome = generateFor (classOf[Vuelo])
+  val aerolineasHome = generateFor (classOf[Aerolinea])
 
   before {/*completar con reset de homes*/}
 
@@ -35,8 +36,12 @@ class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Ho
   "Una Aerolinea, " should "conoce sus vuelos" in {
 
 
-    aerolineaLan.vuelos.add(vueloEmpty)
+    aerolineasHome.updater.save(aerolineaLan)
+    vueloEmpty.aerolinea = aerolineaLan
+    vuelosHome.updater.save(vueloEmpty)
 
+    val aerolineaRecuperada = aerolineasHome.locator.get(aerolineaLan.id)
+    aerolineaRecuperada.vuelos.map(_.id) should contain (vueloEmpty.id)
   }
 
 

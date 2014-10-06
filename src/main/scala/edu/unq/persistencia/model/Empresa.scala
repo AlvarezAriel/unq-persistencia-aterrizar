@@ -15,7 +15,7 @@ object Business extends Categoria {val factor:BigDecimal = 0.3}
 object Primera extends Categoria  {val factor:BigDecimal = 0.5}
 object Turista extends Categoria  {val factor:BigDecimal = 0.2}
 
-class Aerolinea extends Identificable {
+class Aerolinea extends Entity[Aerolinea] {
   @BeanProperty var vuelos:java.util.Set[Vuelo] = Set.empty[Vuelo]
   @BeanProperty var nombre:String = ""
 }
