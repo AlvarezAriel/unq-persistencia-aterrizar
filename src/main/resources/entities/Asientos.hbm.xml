@@ -12,7 +12,7 @@
         <property name="apellido" type="string"/>
         <property name="username" type="string"/>
         <property name="email" type="string"/>
-        <!--<property name="fechaNacimiento" type="org.joda.time.contrib.hibernate.PersistentDateTime"/>-->
+        <property name="fechaNacimiento" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
         <property name="validado" type="boolean"/>
         <property name="codigoValidacion" type="string"/>
         <property name="password" type="string"/>
@@ -80,6 +80,8 @@
         <many-to-one name="destino" class="edu.unq.persistencia.model.Locacion" cascade="save-update"/>
         <many-to-one name="vuelo" class="edu.unq.persistencia.model.Vuelo" cascade="save-update" column="vueloId"/>
         <property name="precioBase" type="org.hibernate.type.BigDecimalType"/>
+        <property name="llegada" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
+        <property name="salida" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
         <set name="asientos" table="Asiento" inverse="true" lazy="false" fetch="select" cascade="all">
             <key>
                 <column name="tramoId" not-null="false" />

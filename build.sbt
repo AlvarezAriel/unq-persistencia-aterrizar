@@ -18,5 +18,6 @@ libraryDependencies ++= List(
   "org.hsqldb" % "hsqldb" % "2.2.8",
   "org.slf4j" % "slf4j-api" % "1.6.1",
   "org.slf4j" % "slf4j-log4j12" % "1.6.1",
-  "log4j" % "log4j" % "1.2.16"
+  "log4j" % "log4j" % "1.2.16",
+  "org.jadira.usertype" % "usertype.core" % "3.0.0.CR1"
 )
