@@ -5,11 +5,7 @@ import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import scala.collection.JavaConversions._
 
-class AerolineasSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer with DefaultSessionProviderComponent{
-  val asientosHome = generateFor (classOf[Asiento])
-  val tramosHome = generateFor (classOf[Tramo])
-  val vuelosHome = generateFor (classOf[Vuelo])
-  val aerolineasHome = generateFor (classOf[Aerolinea])
+class AerolineasSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer with DefaultSessionProviderComponent{
 
   var fixture:BasicFixture = _
 

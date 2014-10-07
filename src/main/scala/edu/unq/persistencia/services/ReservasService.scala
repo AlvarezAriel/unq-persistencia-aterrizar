@@ -2,26 +2,23 @@ package edu.unq.persistencia.services
 
 import edu.unq.persistencia.model.login.UsuarioEntity
 import edu.unq.persistencia.model.{Tramo, Asiento}
-import edu.unq.persistencia.cake.component.HomeComponentJPA
 import edu.unq.persistencia.bussinessExceptions.{AsientoYaReservado, Assert}
-import scala.collection.JavaConversions._
+import org.hibernate.Session
+import org.hibernate.criterion.Restrictions
 
-abstract class ReservasService {
+class ReservasService {
 
-  implicit val asientosHome: HomeComponentJPA[Asiento]
-  implicit val usuariosHome: HomeComponentJPA[UsuarioEntity]
-
-  def reservarAsiento(usuario:UsuarioEntity, asiento:Asiento) = {
+  def reservarAsiento(usuario:UsuarioEntity, asiento:Asiento)(implicit session:Session) = {
     Assert(!asiento.reservado).using(AsientoYaReservado)
-    asiento.pasajero = usuario
+    asiento.reservarPara(usuario)
   }
 
-  def reservarAsientos(usuario:UsuarioEntity, asientos:Seq[Asiento]){
+  def reservarAsientos(usuario:UsuarioEntity, asientos:Seq[Asiento])(implicit session:Session) = {
     Assert(asientos.forall(_.reservado)).using(AsientoYaReservado)
-    asientos.foreach(_.pasajero=usuario)
+    asientos.foreach(_.reservarPara(usuario))
   }
 
-  def asientosDisponiblesPara(tramo:Tramo){
-    tramo.asientos.filter(_.libre)
+  def asientosDisponiblesPara(tramo:Tramo)(implicit session:Session) = {
+    session.createCriteria(classOf[Asiento]).add(Restrictions.isNotNull("pasajero")).list
   }
 }

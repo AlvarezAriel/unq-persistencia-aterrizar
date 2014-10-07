@@ -1,18 +1,17 @@
 import edu.unq.persistencia.cake.component.DBAction
-import edu.unq.persistencia.model.login.UsuarioEntity
 import edu.unq.persistencia.{model, DefaultSessionProviderComponent}
 import edu.unq.persistencia.model._
 import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 
 class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer with DefaultSessionProviderComponent {
-  val asientosHome = generateFor(classOf[Asiento])
-  val usuariosHome = generateFor(classOf[UsuarioEntity])
   var fixture:BasicFixture = _
 
   before {
     fixture = BasicFixture()
-//    asientosHome.updater.deleteAll
+    DBAction.withSession { implicit session =>
+      usuariosHome.updater.save(fixture.usuarioPepe)
+    }
   }
 
   "Un asiento, " should "puede ser guardado" in DBAction.withSession { implicit session =>
@@ -37,13 +36,11 @@ class AsientoMappingSpec  extends FlatSpec with Matchers with BeforeAndAfter wit
   }
 
   it should " puede ser asignado a un usuario" in DBAction.withSession { implicit session =>
-    usuariosHome.updater.save(fixture.usuarioPepe)
     fixture.asientoBusiness.pasajero = fixture.usuarioPepe
     asientosHome.updater.save(fixture.asientoBusiness)
 
     val asientoRecuperado = asientosHome.locator.get(fixture.asientoBusiness.id)
     asientoRecuperado.pasajero.id should be equals fixture.usuarioPepe.id
-
 
   }
 

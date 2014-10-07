@@ -28,6 +28,7 @@ class Asiento extends Entity[Asiento] {
 
   def reservado = pasajero != null
   def libre = !reservado
+  def reservarPara(usuario:UsuarioEntity) = this.pasajero = usuario
 }
 
 class Vuelo extends Entity[Vuelo] {
