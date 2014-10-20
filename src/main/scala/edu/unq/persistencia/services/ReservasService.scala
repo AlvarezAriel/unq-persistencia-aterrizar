@@ -5,20 +5,33 @@ import edu.unq.persistencia.model.{Tramo, Asiento}
 import edu.unq.persistencia.bussinessExceptions.{AsientoYaReservado, Assert}
 import org.hibernate.Session
 import org.hibernate.criterion.Restrictions
+import scala.collection.JavaConversions._
 
 class ReservasService {
 
-  def reservarAsiento(usuario:UsuarioEntity, asiento:Asiento)(implicit session:Session) = {
-    Assert(!asiento.reservado).using(AsientoYaReservado)
-    asiento.reservarPara(usuario)
+  def reservarAsiento(usuario:UsuarioEntity, asientoId:Long)(implicit session:Session) = {
+
+    val asiento  = session.createCriteria(classOf[Asiento])
+        .add(Restrictions.isNotNull("pasajero"))
+        .add(Restrictions.eq("id", asientoId)
+    ).uniqueResult()
+
+    Assert(asiento != null).using(AsientoYaReservado)
+    asiento.asInstanceOf[Asiento].reservarPara(usuario)
   }
 
-  def reservarAsientos(usuario:UsuarioEntity, asientos:Seq[Asiento])(implicit session:Session) = {
-    Assert(asientos.forall(_.reservado)).using(AsientoYaReservado)
+  def reservarAsientos(usuario:UsuarioEntity, idsAsientos:Seq[Long])(implicit session:Session) = {
+
+    val asientos  = session.createCriteria(classOf[Asiento]).
+        add(Restrictions.in("id", idsAsientos)).
+        add(Restrictions.isNotNull("pasajero")).
+    list.toSet.asInstanceOf[Set[Asiento]]
+
+    Assert(asientos.size == idsAsientos.size).using(AsientoYaReservado)
     asientos.foreach(_.reservarPara(usuario))
   }
 
-  def asientosDisponiblesPara(tramo:Tramo)(implicit session:Session) = {
+  def asientosDisponiblesPara(tramoID:Tramo)(implicit session:Session) = {
     session.createCriteria(classOf[Asiento]).add(Restrictions.isNotNull("pasajero")).list
   }
 }

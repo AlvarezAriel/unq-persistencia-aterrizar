@@ -24,7 +24,7 @@ class ReservasSpec  extends FlatSpec with Matchers with BeforeAndAfter with Home
 
   "ReservasService" should "reservar un asiento libre" in DBAction.withSession { implicit session =>
     val service: ReservasService = new ReservasService
-    service.reservarAsiento(fixture.usuarioPepe, fixture.asientoBusiness)
+    service.reservarAsiento(fixture.usuarioPepe, fixture.asientoBusiness.id)
 
   }
 
