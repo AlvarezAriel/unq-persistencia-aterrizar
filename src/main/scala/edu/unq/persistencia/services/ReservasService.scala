@@ -12,7 +12,7 @@ class ReservasService {
   def reservarAsiento(usuario:UsuarioEntity, asientoId:Long)(implicit session:Session) = {
 
     val asiento  = session.createCriteria(classOf[Asiento])
-        .add(Restrictions.isNotNull("pasajero"))
+        .add(Restrictions.isNull("pasajero"))
         .add(Restrictions.eq("id", asientoId)
     ).uniqueResult()
 
@@ -24,14 +24,15 @@ class ReservasService {
 
     val asientos  = session.createCriteria(classOf[Asiento]).
         add(Restrictions.in("id", idsAsientos)).
-        add(Restrictions.isNotNull("pasajero")).
+        add(Restrictions.isNull("pasajero")).
     list.toSet.asInstanceOf[Set[Asiento]]
 
     Assert(asientos.size == idsAsientos.size).using(AsientoYaReservado)
     asientos.foreach(_.reservarPara(usuario))
   }
 
-  def asientosDisponiblesPara(tramoID:Tramo)(implicit session:Session) = {
-    session.createCriteria(classOf[Asiento]).add(Restrictions.isNotNull("pasajero")).list
+  def asientosDisponiblesPara(tramoID:Long)(implicit session:Session) = {
+    session.createCriteria(classOf[Asiento]).add(Restrictions.eq("tramo.id", tramoID)).list.toSet.asInstanceOf[Set[Asiento]]
   }
+
 }

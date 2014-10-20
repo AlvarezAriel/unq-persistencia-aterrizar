@@ -1,6 +1,7 @@
 import edu.unq.persistencia.cake.component.DBAction
 import edu.unq.persistencia.DefaultSessionProviderComponent
 import edu.unq.persistencia.model._
+import edu.unq.persistencia.services._
 import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, Matchers, FlatSpec}
 import scala.collection.JavaConversions._

@@ -12,7 +12,7 @@ trait BasicFixtureContainer {
 
     val origenBuenosAires = Locacion("Buenos Aires")
     val destinoTokyo = Locacion("Tokyo")
-    val tramo = Tramo(origenBuenosAires, destinoTokyo, precioBase = 50)
+    val tramo = Tramo(origenBuenosAires, destinoTokyo, precioBase = 5000)
     val vueloEmpty = Vuelo(mutable.Set.empty[Tramo])
     val aerolineaLan = new Aerolinea
     aerolineaLan.nombre = "LAN"
@@ -20,5 +20,7 @@ trait BasicFixtureContainer {
     val asientoBusiness = Asiento(1, Business)
     val asientoTurista = Asiento(2, Turista)
     val asientoPrimera = Asiento(3, Primera)
+
+
   }
 }
