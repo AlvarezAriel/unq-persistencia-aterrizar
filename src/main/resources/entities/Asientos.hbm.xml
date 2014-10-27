@@ -98,5 +98,53 @@
             <column name="nombre" not-null="true" />
         </property>
     </class>
+    <!--class FilterExpression(var propertyName:String,-->
+    <!--var propertyValue:String,-->
+    <!--var longValue:Long,-->
+    <!--var stringValue:String,-->
+    <!--var dateValue:DateTime-->
+    <class name="edu.unq.persistencia.model.filters.Filter" table="Filter">
+        <id name="id" type="long" column="id">
+            <generator class="native"/>
+        </id>
+        <discriminator column="FILTER_ELEMENT_TYPE" type="string"/>
+
+        <subclass name="edu.unq.persistencia.model.filters.CompoundCondition">
+            <set name="filters" cascade="all">
+                <key>
+                    <column name="filterId" not-null="false" />
+                </key>
+                <one-to-many class="edu.unq.persistencia.model.filters.Filter"/>
+            </set>
+            <subclass name="edu.unq.persistencia.model.filters.OR" discriminator-value="OR"/>
+            <subclass name="edu.unq.persistencia.model.filters.AND" discriminator-value="AND"/>
+        </subclass>
+
+        <subclass name="edu.unq.persistencia.model.filters.FilterExpression" discriminator-value="Expression">
+            <join table="FilterExpression">
+                <key column="id"/>
+                <property name="propertyValue"/>
+                <property name="propertyName"/>
+                <property name="longValue"/>
+                <property name="stringValue"/>
+                <property name="dateValue" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
+            </join>
+        </subclass>
+    </class>
+
+    <class name="edu.unq.persistencia.model.filters.OrderBy">
+        <id name="id" type="long" column="id">
+            <generator class="native"/>
+        </id>
+        <property name="propertyName"/>
+    </class>
+
+    <class name="edu.unq.persistencia.model.filters.Search">
+        <id name="id" type="long" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="filter" class="edu.unq.persistencia.model.filters.Filter"/>
+        <many-to-one name="order" class="edu.unq.persistencia.model.filters.OrderBy"/>
+    </class>
 
 </hibernate-mapping>

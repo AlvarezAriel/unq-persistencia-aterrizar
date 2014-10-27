@@ -1,34 +1,43 @@
 package edu.unq.persistencia.model.filters
 
-import org.hibernate.criterion.{Criterion, Restrictions}
+import edu.unq.persistencia.model.Entity
+import org.hibernate.Criteria
+import org.hibernate.criterion.{Order, Criterion, Restrictions}
 import org.joda.time.DateTime
+import scala.beans.BeanProperty
 import scala.collection.mutable
 import scala.collection.JavaConversions._
 
-trait Filter {
-    def build:Criterion
+class Search(@BeanProperty var filter:Filter, @BeanProperty var order:OrderBy) extends Entity[Search]
+
+abstract class Filter extends Entity[Filter]{
+    def buildCriterion:Criterion
+    def build(c:Criteria) = c.add(this.buildCriterion)
 }
 
-class FilterExpression(var propertyName:String,
-                       var propertyValue:String,
-                       var longValue:Long,
-                       var stringValue:String,
-                       var dateValue:DateTime
+class OrderBy(@BeanProperty var propertyName:String) extends Entity[OrderBy] {
+    def addOrderTo(c:Criteria) = c.addOrder(Order.desc(propertyName))
+}
+
+class FilterExpression(
+                       @BeanProperty var propertyName:String = "",
+                       @BeanProperty var propertyValue:String,
+                       @BeanProperty var longValue:Long,
+                       @BeanProperty var stringValue:String,
+                       @BeanProperty var dateValue:DateTime
 ) extends Filter {
-    def build = Restrictions.eq(propertyName,propertyValue)
+    override def buildCriterion: Criterion = Restrictions.eq(propertyName,propertyValue)
 }
 
-abstract class CompoundCondition(var filtros:java.util.List[Filter] = mutable.Seq.empty[Filter]) extends Filter
+abstract class CompoundCondition(@BeanProperty var filters:java.util.List[Filter] = mutable.Seq.empty[Filter]) extends Filter
 
-class OR extends CompoundCondition { def build = Restrictions.and(filtros.map(_.build):_*) }
+class OR extends CompoundCondition {
+    def buildCriterion:Criterion = Restrictions.or(filters.map(_.buildCriterion):_*)
+}
 
-class AND extends CompoundCondition { def build = Restrictions.or(filtros.map(_.build):_*) }
-
-
-
+class AND extends CompoundCondition { def buildCriterion:Criterion = Restrictions.and(filters.map(_.buildCriterion):_*) }
 
 object Filter {
-    implicit def filterToCriterion(filter:Filter):Criterion = filter.build
+    implicit def filterToCriteria(filter:Filter):Criterion = filter.buildCriterion
 }
 
-import Filter._
