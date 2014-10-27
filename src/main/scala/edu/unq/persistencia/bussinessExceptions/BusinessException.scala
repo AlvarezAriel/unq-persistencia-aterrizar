@@ -13,5 +13,5 @@ case object  EnviarMailException extends BusinessException
 case object  AsientoYaReservado extends BusinessException
 
 case class Assert(condition:Boolean){
-  def using(e:BusinessException) = if(!condition) throw e
+  def otherwiseThrow(e:BusinessException) = if(!condition) throw e
 }

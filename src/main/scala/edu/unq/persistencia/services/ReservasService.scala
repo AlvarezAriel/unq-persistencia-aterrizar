@@ -9,30 +9,35 @@ import scala.collection.JavaConversions._
 
 class ReservasService {
 
-  def reservarAsiento(usuario:UsuarioEntity, asientoId:Long)(implicit session:Session) = {
+    def reservarAsiento(usuario: UsuarioEntity, asientoId: Long)(implicit session: Session) = {
 
-    val asiento  = session.createCriteria(classOf[Asiento])
-        .add(Restrictions.isNull("pasajero"))
-        .add(Restrictions.eq("id", asientoId)
-    ).uniqueResult()
+        val asiento = session.createCriteria(classOf[Asiento])
+            .add(Restrictions.isNull("pasajero"))
+            .add(Restrictions.eq("id", asientoId)
+            ).uniqueResult()
 
-    Assert(asiento != null).using(AsientoYaReservado)
-    asiento.asInstanceOf[Asiento].reservarPara(usuario)
-  }
+        Assert(asiento != null).otherwiseThrow(AsientoYaReservado)
+        asiento.asInstanceOf[Asiento].reservarPara(usuario)
+        asiento.asInstanceOf[Asiento]
+    }
 
-  def reservarAsientos(usuario:UsuarioEntity, idsAsientos:Seq[Long])(implicit session:Session) = {
+    def reservarAsientos(usuario: UsuarioEntity, idsAsientos: Seq[Long])(implicit session: Session) = {
 
-    val asientos  = session.createCriteria(classOf[Asiento]).
-        add(Restrictions.in("id", idsAsientos)).
-        add(Restrictions.isNull("pasajero")).
-    list.toSet.asInstanceOf[Set[Asiento]]
+        val asientos = session.createCriteria(classOf[Asiento]).
+            add(Restrictions.in("id", idsAsientos)).
+            add(Restrictions.isNull("pasajero")).
+            list.toSet.asInstanceOf[Set[Asiento]]
 
-    Assert(asientos.size == idsAsientos.size).using(AsientoYaReservado)
-    asientos.foreach(_.reservarPara(usuario))
-  }
+        Assert(asientos.size == idsAsientos.size).otherwiseThrow(AsientoYaReservado)
+        asientos.foreach(_.reservarPara(usuario))
+        asientos
+    }
 
-  def asientosDisponiblesPara(tramoID:Long)(implicit session:Session) = {
-    session.createCriteria(classOf[Asiento]).add(Restrictions.eq("tramo.id", tramoID)).list.toSet.asInstanceOf[Set[Asiento]]
-  }
+    def asientosDisponiblesPara(tramoID: Long)(implicit session: Session) = {
+        session.createCriteria(classOf[Asiento])
+            .add(Restrictions.eq("tramo.id", tramoID))
+            .add(Restrictions.isNull("pasajero"))
+            .list.toSet.asInstanceOf[Set[Asiento]]
+    }
 
 }
