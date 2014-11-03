@@ -34,7 +34,7 @@ class AerolineasSpec extends FlatSpec with Matchers with BeforeAndAfter with Hom
     val vueloRecuperado = vuelosHome.locator.get(fixture.vueloEmpty.id)
     vueloRecuperado.tramos.map(_.id) should contain (fixture.tramo.id)
   }
-e m
+
   "Una Aerolinea, " should "conoce sus vuelos" in DBAction.withSession { implicit session =>
 
     fixture.aerolineaLan.vuelos.add(fixture.vueloEmpty)

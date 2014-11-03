@@ -60,13 +60,12 @@
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
-        <many-to-one name="aerolinea" column="aerolineaId" class="edu.unq.persistencia.model.Aerolinea" not-null="false"/>
-
+        <many-to-one name="aerolinea" column="aerolineaId" class="edu.unq.persistencia.model.Aerolinea" cascade="all" not-null="false"/>
         <set name="tramos" table="Tramo" inverse="true"  fetch="select" cascade="all">
             <key>
                 <column name="vueloId" not-null="false" />
             </key>
-            <one-to-many class="edu.unq.persistencia.model.Tramo"/>
+            <one-to-many class="edu.unq.persistencia.model.Tramo" />
         </set>
 
 

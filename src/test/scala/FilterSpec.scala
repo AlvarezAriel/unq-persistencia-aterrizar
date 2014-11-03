@@ -1,6 +1,9 @@
+import java.util
+
 import edu.unq.persistencia.DefaultSessionProviderComponent
 import edu.unq.persistencia.bussinessExceptions.AsientoYaReservado
 import edu.unq.persistencia.cake.component.DBAction
+import edu.unq.persistencia.model.Vuelo
 import edu.unq.persistencia.model.filters._
 import edu.unq.persistencia.model.filters.Filter._
 import edu.unq.persistencia.services.ReservasService
@@ -37,7 +40,21 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
         fetchedSearch.order.propertyName shouldBe  "nombre"
     }
 
-    
+    it should "poder realizar una búsqueda" in DBAction.withSession { implicit session =>
+        tramosHome.updater.save(fixture.tramo)
+        fixture.vueloEmpty.aerolinea = fixture.aerolineaLan
+        vuelosHome.updater.save(fixture.vueloEmpty)
+
+        val aSearch: Search =
+            Search(
+                ('aerolinea, ID) =? fixture.vueloEmpty.aerolinea
+            )
+
+        val criteria = aSearch.buildCriteria(classOf[Vuelo])
+        val vuelos = criteria.list().toSet.asInstanceOf[Set[Vuelo]]
+
+        vuelos.exists(_.aerolinea.nombre == fixture.vueloEmpty.aerolinea.nombre) shouldBe true
+    }
 
     it should "realiza búsqueda de vuelos por menor costo" in DBAction.withSession { implicit session => }
 

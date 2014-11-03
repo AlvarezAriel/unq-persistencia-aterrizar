@@ -1,7 +1,7 @@
 package edu.unq.persistencia.model.filters
 
-import edu.unq.persistencia.model.Entity
-import org.hibernate.Criteria
+import edu.unq.persistencia.model.{Identificable, Entity}
+import org.hibernate.{Session, Criteria}
 import org.hibernate.criterion.{Order, Criterion, Restrictions}
 import org.joda.time.DateTime
 import scala.beans.BeanProperty
@@ -12,6 +12,10 @@ class Search(@BeanProperty var filter:Filter, @BeanProperty var order:OrderBy) e
     def orderBy(propertyName:Symbol) = {
         this.order = new OrderBy(propertyName.toString().replace("'",""))
         this
+    }
+
+    def buildCriteria[T <: Entity[T]](aClass:Class[T])(implicit session:Session) = {
+        order.addOrderTo(session.createCriteria(aClass).add(filter.buildCriterion))
     }
 }
 
@@ -31,7 +35,7 @@ class FilterExpression(
                        @BeanProperty var propertyValue:String,
                        @BeanProperty var propertyType:String
 ) extends Filter {
-    override def buildCriterion: Criterion = Restrictions.eq(propertyName,propertyValue)
+    override def buildCriterion: Criterion = Restrictions.eq(propertyName,decodeValue)
     def decodeValue:Any = propertyType match {
         case "date" => DateTime.parse(propertyValue)
         case "long" => propertyValue.toLong
@@ -61,6 +65,12 @@ object Filter {
             propertyName = tuple._1.toString(),
             propertyType = tuple._2.stringName,
             propertyValue = a.toString
+        )
+
+        def =?(a:Identificable):Filter = new FilterExpression(
+            propertyName = s"${tuple._1.toString().replace("'","")}.id",
+            propertyType = tuple._2.stringName,
+            propertyValue = a.id.toString
         )
     }
 }
