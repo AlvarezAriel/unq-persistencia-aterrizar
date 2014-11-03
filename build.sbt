@@ -1,4 +1,4 @@
-name := """unq-persistencia-aterrizar"""
+name := """aterrizar"""
 
 version := "1.0"
 

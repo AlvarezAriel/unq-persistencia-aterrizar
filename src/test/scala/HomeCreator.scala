@@ -1,6 +1,6 @@
 import edu.unq.persistencia.cake.component.HomeComponentJPA
-import edu.unq.persistencia.DefaultSessionProviderComponent
 import edu.unq.persistencia.model._
+import edu.unq.persistencia.model.filters.Filter
 import edu.unq.persistencia.model.login.UsuarioEntity
 
 trait HomeCreator {
@@ -13,4 +13,5 @@ trait HomeCreator {
   val tramosHome = generateFor (classOf[Tramo])
   val vuelosHome = generateFor (classOf[Vuelo])
   val aerolineasHome = generateFor (classOf[Aerolinea])
+  val filtrosHome = generateFor (classOf[Filter])
 }

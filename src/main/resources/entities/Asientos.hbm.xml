@@ -125,9 +125,7 @@
                 <key column="id"/>
                 <property name="propertyValue"/>
                 <property name="propertyName"/>
-                <property name="longValue"/>
-                <property name="stringValue"/>
-                <property name="dateValue" type="org.jadira.usertype.dateandtime.joda.PersistentDateTime"/>
+                <property name="propertyType"/>
             </join>
         </subclass>
     </class>

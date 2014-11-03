@@ -58,7 +58,7 @@ object Vuelo { def apply(tramos:java.util.Set[Tramo]) = {val esto = new Vuelo();
 
 
 object Tramo {
-  implicit def intToJavaBigDecimal(entero:Int) = java.math.BigDecimal.valueOf(entero)
+  implicit def intToJavaBigDecimal(entero:Int):java.math.BigDecimal = java.math.BigDecimal.valueOf(entero)
   def apply(origen:Locacion, destino:Locacion, precioBase:java.math.BigDecimal) = {
     val esto = new Tramo(); esto.origen = origen; esto.precioBase = precioBase; esto
   }
