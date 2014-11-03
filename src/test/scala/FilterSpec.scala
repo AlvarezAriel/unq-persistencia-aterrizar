@@ -32,9 +32,20 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
                 (('aerolinea, ID) =? 1 && ('method, DATE) =? "2014-05-11") || ('aerolinea, ID) =? 2
             ) orderBy 'nombre
         searchsHome.updater.save(aSearch)
-        session.flush()
-        val fetchedFilter = searchsHome.locator.get(aSearch.id)
-        fetchedFilter.order.propertyName shouldBe  "nombre"
+
+        val fetchedSearch = searchsHome.locator.get(aSearch.id)
+        fetchedSearch.order.propertyName shouldBe  "nombre"
+    }
+
+    it should "ser ejecutado y devolver el conjunto filtrado" in DBAction.withSession { implicit session =>
+        val aSearch: Search =
+            Search(
+                (('aerolinea, ID) =? 1 && ('method, DATE) =? "2014-05-11") || ('aerolinea, ID) =? 2
+            ) orderBy 'nombre
+        searchsHome.updater.save(aSearch)
+
+        val fetchedSearch = searchsHome.locator.get(aSearch.id)
+        fetchedSearch.order.propertyName shouldBe  "nombre"
     }
 
 }
