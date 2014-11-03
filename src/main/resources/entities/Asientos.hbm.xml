@@ -137,7 +137,7 @@
         <property name="propertyName"/>
     </class>
 
-    <class name="edu.unq.persistencia.model.filters.Search">
+    <class name="edu.unq.persistencia.model.filters.Search" table="SEARCH">
         <id name="id" type="long" column="id">
             <generator class="native"/>
         </id>

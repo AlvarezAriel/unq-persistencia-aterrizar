@@ -8,7 +8,12 @@ import scala.beans.BeanProperty
 import scala.collection.mutable
 import scala.collection.JavaConversions._
 
-class Search(@BeanProperty var filter:Filter, @BeanProperty var order:OrderBy) extends Entity[Search]
+class Search(@BeanProperty var filter:Filter, @BeanProperty var order:OrderBy) extends Entity[Search] {
+    def orderBy(propertyName:Symbol) = {
+        this.order = new OrderBy(propertyName.toString())
+        this
+    }
+}
 
 abstract class Filter extends Entity[Filter]{
     def buildCriterion:Criterion
@@ -18,6 +23,8 @@ abstract class Filter extends Entity[Filter]{
 class OrderBy(@BeanProperty var propertyName:String) extends Entity[OrderBy] {
     def addOrderTo(c:Criteria):Criteria = {c.addOrder(Order.asc(propertyName)); c}
 }
+
+object NoOrder extends OrderBy("") {override def addOrderTo(c:Criteria):Criteria = c}
 
 class FilterExpression(
                        @BeanProperty var propertyName:String = "",
@@ -48,7 +55,6 @@ object Filter {
     implicit class FilterOperators(filter:Filter){
         def ||(otherFilter:Filter):Filter = { OR(filter, otherFilter) }
         def &&(otherFilter:Filter):Filter = { AND(filter, otherFilter) }
-        def orderBy(propertyName:Symbol):Criteria =
     }
     implicit class SymbolsToExpressions(tuple:(Symbol,ColumnType)){
         def =?(a:Any):Filter = new FilterExpression(
@@ -60,6 +66,10 @@ object Filter {
 }
 
 //CONSTRUCTORES
+object Search{
+    def apply(filter:Filter) = {val s=new Search(filter, NoOrder);s;}
+}
+
 trait ColumnType { val stringName:String}
 object DATE extends ColumnType {val stringName = "date"}
 object ID   extends ColumnType {val stringName = "long"}
