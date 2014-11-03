@@ -131,18 +131,18 @@
     </class>
 
     <class name="edu.unq.persistencia.model.filters.OrderBy">
-        <id name="id" type="long" column="id">
-            <generator class="native"/>
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
         </id>
         <property name="propertyName"/>
     </class>
 
-    <class name="edu.unq.persistencia.model.filters.Search" table="SEARCH">
-        <id name="id" type="long" column="id">
-            <generator class="native"/>
+    <class name="edu.unq.persistencia.model.filters.Search">
+        <id name="id" type="java.lang.Long" >
+            <generator class="native" />
         </id>
-        <many-to-one name="filter" class="edu.unq.persistencia.model.filters.Filter"/>
-        <many-to-one name="order" class="edu.unq.persistencia.model.filters.OrderBy"/>
+        <many-to-one name="filter" column="filterId" class="edu.unq.persistencia.model.filters.Filter" cascade="all"/>
+        <many-to-one name="order" column="orderId" class="edu.unq.persistencia.model.filters.OrderBy" cascade="all"/>
     </class>
 
 </hibernate-mapping>

@@ -10,7 +10,7 @@ import scala.collection.JavaConversions._
 
 class Search(@BeanProperty var filter:Filter, @BeanProperty var order:OrderBy) extends Entity[Search] {
     def orderBy(propertyName:Symbol) = {
-        this.order = new OrderBy(propertyName.toString())
+        this.order = new OrderBy(propertyName.toString().replace("'",""))
         this
     }
 }
