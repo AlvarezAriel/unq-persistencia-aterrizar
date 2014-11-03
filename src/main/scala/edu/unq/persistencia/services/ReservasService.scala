@@ -1,7 +1,7 @@
 package edu.unq.persistencia.services
 
 import edu.unq.persistencia.model.login.UsuarioEntity
-import edu.unq.persistencia.model.{Tramo, Asiento}
+import edu.unq.persistencia.model.{Vuelo, Tramo, Asiento}
 import edu.unq.persistencia.bussinessExceptions.{AsientoYaReservado, Assert}
 import org.hibernate.Session
 import org.hibernate.criterion.Restrictions
@@ -39,5 +39,6 @@ class ReservasService {
             .add(Restrictions.isNull("pasajero"))
             .list.toSet.asInstanceOf[Set[Asiento]]
     }
+
 
 }

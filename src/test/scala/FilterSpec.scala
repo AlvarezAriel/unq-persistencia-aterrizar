@@ -37,15 +37,17 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
         fetchedSearch.order.propertyName shouldBe  "nombre"
     }
 
-    it should "ser ejecutado y devolver el conjunto filtrado" in DBAction.withSession { implicit session =>
-        val aSearch: Search =
-            Search(
-                (('aerolinea, ID) =? 1 && ('method, DATE) =? "2014-05-11") || ('aerolinea, ID) =? 2
-            ) orderBy 'nombre
-        searchsHome.updater.save(aSearch)
+    
 
-        val fetchedSearch = searchsHome.locator.get(aSearch.id)
-        fetchedSearch.order.propertyName shouldBe  "nombre"
-    }
+    it should "realiza búsqueda de vuelos por menor costo" in DBAction.withSession { implicit session => }
+
+    it should "realiza búsqueda de vuelos por menor cantidad de escalas" in DBAction.withSession { implicit session => }
+
+    it should "realiza una búsqueda de vuelos y la repite obteniendo otro resultado" in DBAction.withSession { implicit session => }
+
+    it should "realiza una búsqueda de vuelos por menor duración" in DBAction.withSession { implicit session => }
+
+    "" should "" in DBAction.withSession { implicit session => }
+
 
 }
