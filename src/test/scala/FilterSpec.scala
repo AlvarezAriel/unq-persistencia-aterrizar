@@ -1,13 +1,13 @@
+import com.sun.xml.internal.bind.v2.model.core.ID
 import edu.unq.persistencia.DefaultSessionProviderComponent
-import edu.unq.persistencia.bussinessExceptions.AsientoYaReservado
 import edu.unq.persistencia.cake.component.DBAction
 import edu.unq.persistencia.model.Vuelo
 import edu.unq.persistencia.model.filters._
-import edu.unq.persistencia.model.filters.Filter._
+import edu.unq.persistencia.model.filters.VuelosValueContainer._
+import edu.unq.persistencia.model.filters.Filter.SymbolsToExpressions
 import edu.unq.persistencia.services.ReservasService
 import fixtures.BasicFixtureContainer
 import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
-import scala.collection.JavaConversions._
 
 class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCreator with BasicFixtureContainer with DefaultSessionProviderComponent {
 
@@ -28,14 +28,12 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
     after {}
 
     "Un search" should "ser guadrado y recuperado" in DBAction.withSession { implicit session =>
-        val aSearch: Search =
-            Search(
-                (('aerolinea, ID) =? 1 && ('method, DATE) =? "2014-05-11") || ('aerolinea, ID) =? 2
-            ) orderBy 'nombre
+        val aSearch: Search = Select all vuelos where "aerolinea.id" =? 1
+
         searchsHome.updater.save(aSearch)
 
-        val fetchedSearch = searchsHome.locator.get(aSearch.id)
-        fetchedSearch.order.propertyName shouldBe  "nombre"
+        val idsVuelos = aSearch.list
+        val sarasa = 1
     }
 
     it should "poder realizar una búsqueda" in DBAction.withSession { implicit session =>
@@ -43,15 +41,7 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
         fixture.vueloEmpty.aerolinea = fixture.aerolineaLan
         vuelosHome.updater.save(fixture.vueloEmpty)
 
-        val aSearch: Search =
-            Search(
-                ('aerolinea, ID) =? fixture.vueloEmpty.aerolinea
-            )
 
-        val criteria = aSearch.buildCriteria(classOf[Vuelo])
-        val vuelos = criteria.list().toSet.asInstanceOf[Set[Vuelo]]
-
-        vuelos.exists(_.aerolinea.nombre == fixture.vueloEmpty.aerolinea.nombre) shouldBe true
     }
 
     it should "realiza búsqueda de vuelos por menor costo" in DBAction.withSession { implicit session => }

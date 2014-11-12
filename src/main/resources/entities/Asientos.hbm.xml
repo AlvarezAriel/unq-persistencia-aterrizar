@@ -124,12 +124,11 @@
                 <key column="id"/>
                 <property name="propertyValue"/>
                 <property name="propertyName"/>
-                <property name="propertyType"/>
             </join>
         </subclass>
     </class>
 
-    <class name="edu.unq.persistencia.model.filters.OrderBy">
+    <class name="edu.unq.persistencia.model.filters.FieldName">
         <id name="id" type="java.lang.Long" >
             <generator class="native" />
         </id>
@@ -141,7 +140,8 @@
             <generator class="native" />
         </id>
         <many-to-one name="filter" column="filterId" class="edu.unq.persistencia.model.filters.Filter" cascade="all"/>
-        <many-to-one name="order" column="orderId" class="edu.unq.persistencia.model.filters.OrderBy" cascade="all"/>
+        <many-to-one name="order" column="orderId" class="edu.unq.persistencia.model.filters.FieldName" cascade="all"/>
+        <many-to-one name="group" column="groupId" class="edu.unq.persistencia.model.filters.FieldName" cascade="all"/>
     </class>
 
 </hibernate-mapping>
