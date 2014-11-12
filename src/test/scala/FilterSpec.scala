@@ -1,5 +1,3 @@
-import java.util
-
 import edu.unq.persistencia.DefaultSessionProviderComponent
 import edu.unq.persistencia.bussinessExceptions.AsientoYaReservado
 import edu.unq.persistencia.cake.component.DBAction
@@ -62,9 +60,20 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
 
     it should "realiza una búsqueda de vuelos y la repite obteniendo otro resultado" in DBAction.withSession { implicit session => }
 
-    it should "realiza una búsqueda de vuelos por menor duración" in DBAction.withSession { implicit session => }
+    it should "realizar una búsqueda de vuelos por aerolinea" in DBAction.withSession { implicit session => }
 
-    "" should "" in DBAction.withSession { implicit session => }
+    it should "realizar una búsqueda de vuelos por categoría de asiento" in DBAction.withSession { implicit session => }
+
+    it should "realizar una búsqueda de vuelos por fecha de llegada" in DBAction.withSession { implicit session => }
+
+    it should "realizar una búsqueda de vuelos por fecha de salida" in DBAction.withSession { implicit session => }
+
+    it should "realizar una búsqueda de vuelos por origen y destino" in DBAction.withSession { implicit session => }
+
+    it should "realizar una búsqueda de vuelos por aerolinea y menor costo" in DBAction.withSession { implicit session => }
+
+    it should "realizar una búsqueda de vuelos por 2 aerolineas explicitas diferentes y fecha de salida explícita" in
+      DBAction.withSession { implicit session => }
 
 
 }

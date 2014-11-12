@@ -8,9 +8,9 @@ import scala.beans.BeanProperty
 import scala.collection.mutable
 import scala.collection.JavaConversions._
 
-class Search(@BeanProperty var filter:Filter, @BeanProperty var order:OrderBy) extends Entity[Search] {
+class Search(@BeanProperty var filter:Filter, @BeanProperty var order:FieldName, @BeanProperty var group:FieldName ) extends Entity[Search] {
     def orderBy(propertyName:Symbol) = {
-        this.order = new OrderBy(propertyName.toString().replace("'",""))
+        this.order = new FieldName(propertyName.toString().replace("'",""))
         this
     }
 
@@ -24,11 +24,12 @@ abstract class Filter extends Entity[Filter]{
     def build(c:Criteria) = c.add(this.buildCriterion)
 }
 
-class OrderBy(@BeanProperty var propertyName:String) extends Entity[OrderBy] {
+class FieldName(@BeanProperty var propertyName:String) extends Entity[FieldName] {
     def addOrderTo(c:Criteria):Criteria = {c.addOrder(Order.asc(propertyName)); c}
 }
 
-object NoOrder extends OrderBy("") {override def addOrderTo(c:Criteria):Criteria = c}
+
+object EmptyField extends FieldName("") {override def addOrderTo(c:Criteria):Criteria = c}
 
 class FilterExpression(
                        @BeanProperty var propertyName:String = "",
@@ -77,7 +78,7 @@ object Filter {
 
 //CONSTRUCTORES
 object Search{
-    def apply(filter:Filter) = {val s=new Search(filter, NoOrder);s;}
+    def apply(filter:Filter) = {val s=new Search(filter, EmptyField, EmptyField);s;}
 }
 
 trait ColumnType { val stringName:String}
