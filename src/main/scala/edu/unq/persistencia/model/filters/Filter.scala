@@ -27,8 +27,6 @@ class Search(@BeanProperty var filter:Filter, @BeanProperty var order:FieldName,
          |     inner join vuelo.tramos as tramo
          |     inner join tramo.origen as origen
          |     inner join tramo.destino as destino
-         |     inner join tramo.llegada as llegada
-         |     inner join tramo.salida as salida
          |     inner join tramo.asientos as asiento
          | WHERE
          |     ${filter.build}

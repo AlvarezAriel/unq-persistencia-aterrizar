@@ -28,8 +28,9 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
     after {}
 
     "Un search" should "ser guadrado y recuperado" in DBAction.withSession { implicit session =>
-        val aSearch: Search = Select all vuelos where "aerolinea.id" =? 1
-
+        val aSearch: Search = Select all vuelos where "aerolinea.id" =? 1 || "aerolinea.id" =? 0
+        aerolineasHome.updater.save(fixture.aerolineaLan)
+        vuelosHome.updater.save(fixture.vueloEmpty)
         searchsHome.updater.save(aSearch)
 
         val idsVuelos = aSearch.list
