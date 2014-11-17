@@ -22,17 +22,17 @@ class AerolineasSpec extends FlatSpec with Matchers with BeforeAndAfter with Hom
   }
 
   "Un Tramo, " should "ser agregado a un vuelo y guardado" in DBAction.withSession { implicit session =>
-    tramosHome.updater.save(fixture.tramo)
-    val tramoRecuperado = tramosHome.locator.get(fixture.tramo.id)
-    tramoRecuperado.origen should be equals fixture.tramo.origen
+    tramosHome.updater.save(fixture.tramoBsAsTokio)
+    val tramoRecuperado = tramosHome.locator.get(fixture.tramoBsAsTokio.id)
+    tramoRecuperado.origen should be equals fixture.tramoBsAsTokio.origen
   }
 
   "Un Vuelo, " should  "guardado con un tramo, al ser recuperado conserva sus tramos" in DBAction.withSession { implicit session =>
 
-    fixture.vueloEmpty.tramos.add(fixture.tramo)
+    fixture.vueloEmpty.tramos.add(fixture.tramoBsAsTokio)
     vuelosHome.updater.save(fixture.vueloEmpty)
     val vueloRecuperado = vuelosHome.locator.get(fixture.vueloEmpty.id)
-    vueloRecuperado.tramos.map(_.id) should contain (fixture.tramo.id)
+    vueloRecuperado.tramos.map(_.id) should contain (fixture.tramoBsAsTokio.id)
   }
 
   "Una Aerolinea, " should "conoce sus vuelos" in DBAction.withSession { implicit session =>

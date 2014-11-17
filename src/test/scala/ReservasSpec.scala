@@ -54,11 +54,11 @@ class ReservasSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeC
 
     "En un tramo con 3 asientos" should "devuelve un solo asiento que no está reservado" in
         DBAction.withSession { implicit session =>
-            fixture.tramo.asientos.add(fixture.asientoTurista)
-            fixture.tramo.asientos.add(fixture.asientoBusiness)
-            fixture.tramo.asientos.add(fixture.asientoPrimera)
+            fixture.tramoBsAsTokio.asientos.add(fixture.asientoTurista)
+            fixture.tramoBsAsTokio.asientos.add(fixture.asientoBusiness)
+            fixture.tramoBsAsTokio.asientos.add(fixture.asientoPrimera)
             service.reservarAsientos(fixture.usuarioPepe, Seq(fixture.asientoPrimera.id, fixture.asientoTurista.id))
-            service.asientosDisponiblesPara(fixture.tramo.id) should be equals Set(fixture.asientoBusiness)
+            service.asientosDisponiblesPara(fixture.tramoBsAsTokio.id) should be equals Set(fixture.asientoBusiness)
         }
 
 }
