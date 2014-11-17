@@ -12,7 +12,7 @@ import scala.collection.mutable
 import scala.collection.JavaConversions._
 
 class Search(@BeanProperty var filter:Filter, @BeanProperty var order:FieldName, @BeanProperty var group:FieldName ) extends Entity[Search] {
-    def list(implicit session:Session) = {
+    def list()(implicit session:Session) = {
         val createQuery: Query = session.createQuery(buildQuery)
         val list1: util.List[_] = createQuery.list()
         list1.toSeq.asInstanceOf[Seq[Int]]
@@ -28,8 +28,7 @@ class Search(@BeanProperty var filter:Filter, @BeanProperty var order:FieldName,
          |     inner join tramo.origen as origen
          |     inner join tramo.destino as destino
          |     inner join tramo.asientos as asiento
-         | WHERE
-         |     ${filter.build}
+         | ${filter.buildWhere}
          | ${group.build("GROUP")}
          | ${order.build("ORDER")}
        """.stripMargin
@@ -40,29 +39,31 @@ class Search(@BeanProperty var filter:Filter, @BeanProperty var order:FieldName,
 }
 
 object VuelosValueContainer {
-    val vuelos = Search(EmptyFilterExpression)
+    val vuelos = Search(EmptyElements.emptyFilterExpression)
 }
 object Select {
     def all(busqueda:Search) = busqueda
 }
 
 abstract class Filter extends Entity[Filter]{
+    def buildWhere = if(build!= "") s"WHERE $build" else ""
     def build = ""//c.add(this.buildString)
 }
 
 class FieldName(@BeanProperty var propertyName:String) extends Entity[FieldName] {
-    def build(regla:String) = s"$regla BY $propertyName"
+    def build(regla:String) = if (propertyName!= "") s"$regla BY $propertyName" else ""
 }
 
-object EmptyField extends FieldName("") {override def build(e:String) = ""}
-
-object EmptyFilterExpression extends FilterExpression("","") { override def build = "" }
+object EmptyElements {
+    val emptyField = new FieldName("")
+    val emptyFilterExpression = new FilterExpression("","")
+}
 
 class FilterExpression(
                        @BeanProperty var propertyName:String = "",
                        @BeanProperty var propertyValue:String
 ) extends Filter {
-    override def build: String = s"($propertyName = $propertyValue)"
+    override def build: String = if(propertyName != "") s"($propertyName = $propertyValue)" else ""
 }
 
 abstract class CompoundCondition(@BeanProperty var filters:java.util.Set[Filter] = mutable.Set.empty[Filter]) extends Filter{
@@ -88,7 +89,7 @@ object Filter {
 
 //CONSTRUCTORES
 object Search{
-    def apply(filter:Filter) = {val s=new Search(filter, EmptyField, EmptyField);s;}
+    def apply(filter:Filter) = {val s=new Search(filter, EmptyElements.emptyField, EmptyElements.emptyField);s;}
 }
 
 object OR {def apply(filters:Filter*) = { val or = new OR(); or.filters = filters.toSet[Filter]; or}}

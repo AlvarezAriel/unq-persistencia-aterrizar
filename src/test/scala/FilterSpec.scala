@@ -18,10 +18,25 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
     before {
         fixture = BasicFixture()
         DBAction.withSession { implicit session =>
+
             usuariosHome.updater.save(fixture.usuarioPepe)
+
+            aerolineasHome.updater.save(fixture.aerolineaLan)
+
+            fixture.vueloCaro.setAerolinea(fixture.aerolineaLan)
+            vuelosHome.updater.save(fixture.vueloCaro)
+
+            locacionHome.updater.save(fixture.origenBuenosAires)
+            locacionHome.updater.save(fixture.destinoTokyo)
+
+            fixture.tramoBsAsTokio.origen  = fixture.origenBuenosAires
+            fixture.tramoBsAsTokio.destino = fixture.destinoTokyo
+            fixture.tramoBsAsTokio.vuelo   = fixture.vueloCaro
+            tramosHome.updater.save(fixture.tramoBsAsTokio)
+
+            fixture.asientoBusiness.tramo = fixture.tramoBsAsTokio
             asientosHome.updater.save(fixture.asientoBusiness)
-            asientosHome.updater.save(fixture.asientoTurista)
-            asientosHome.updater.save(fixture.asientoPrimera)
+
         }
     }
 
@@ -38,11 +53,12 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
     }
 
     it should "poder realizar una búsqueda" in DBAction.withSession { implicit session =>
-        tramosHome.updater.save(fixture.tramoBsAsTokio)
-        fixture.vueloEmpty.aerolinea = fixture.aerolineaLan
-        vuelosHome.updater.save(fixture.vueloEmpty)
+        val aSearch: Search = Select all vuelos
+        searchsHome.updater.save(aSearch)
 
+        val response = aSearch.list()
 
+        response.size shouldBe 1
     }
 
     it should "realiza búsqueda de vuelos por menor costo" in DBAction.withSession { implicit session =>
@@ -59,7 +75,7 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
 
       searchsHome.updater.save(aSearch)
 
-      val response = aSearch.list(session)
+      val response = aSearch.list()
 
       response.apply(0) shouldBe fixture.vueloBarato
       response.apply(1) shouldBe fixture.vueloCaro
@@ -81,7 +97,7 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
       vuelosHome.updater.save(fixture.vueloCaro)
       vuelosHome.updater.save(fixture.vueloBarato)
 
-      val response = aSearch.list(session)
+      val response = aSearch.list()
 
       response.length shouldBe 3
       response.apply(1) shouldBe fixture.vueloBarato
@@ -103,7 +119,7 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
       fixture.aerolineaLan.vuelos.add(fixture.vueloBarato)
       fixture.aerolineaLan.vuelos.add(fixture.vueloCaro)
 
-      val response = aSearch.list(session)
+      val response = aSearch.list()
 
       //quiero testear haciendo un includes aca, para ver que me respondió los vuelos que efectivamente
       //son de la aerolinea que le indiqué. O sea, algo del estilo response.includes(vueloEmpty)
@@ -132,7 +148,7 @@ class FilterSpec extends FlatSpec with Matchers with BeforeAndAfter with HomeCre
       vuelosHome.updater.save(fixture.vueloBarato)
       //AsientoTurista
 
-      val response = aSearch.list(session)
+      val response = aSearch.list()
 
       response.apply(0) shouldBe fixture.vueloCaro
 

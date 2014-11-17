@@ -8,11 +8,12 @@ trait HomeCreator {
     new HomeComponentJPA[T] {override val clazz: Class[T] = clase}
   }
 
-  val usuariosHome = generateFor(classOf[UsuarioEntity])
-  val asientosHome = generateFor(classOf[Asiento])
-  val tramosHome = generateFor (classOf[Tramo])
-  val vuelosHome = generateFor (classOf[Vuelo])
+  val usuariosHome   = generateFor(classOf[UsuarioEntity])
+  val asientosHome   = generateFor(classOf[Asiento])
+  val tramosHome     = generateFor (classOf[Tramo])
+  val vuelosHome     = generateFor (classOf[Vuelo])
+  val locacionHome   = generateFor (classOf[Locacion])
   val aerolineasHome = generateFor (classOf[Aerolinea])
-  val searchsHome = generateFor (classOf[Search])
-  val filtrosHome = generateFor (classOf[Filter])
+  val searchsHome    = generateFor (classOf[Search])
+  val filtrosHome    = generateFor (classOf[Filter])
 }
