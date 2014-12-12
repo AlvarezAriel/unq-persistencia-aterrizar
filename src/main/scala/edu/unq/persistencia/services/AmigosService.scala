@@ -34,8 +34,8 @@ class AmigosService {
     def misContactos(usuarioOrigen:UsuarioEntity)={
         Cypher(
             s"""
-            |MATCH (user:Usuario {key:${usuarioOrigen.id}) -[:AMIGO_DE*]-> (otro)
+            |MATCH (user:Usuario {key:${usuarioOrigen.id}}) -[:AMIGO_DE*]-> (otro)
             |RETURN Distinct otro.key
-              """.stripMargin).execute()
+              """.stripMargin)().map( row => row[Int]("otro.key")).toList
     }
 }

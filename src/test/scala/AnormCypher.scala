@@ -56,4 +56,22 @@ class AnormCypher extends FlatSpec with Matchers with BeforeAndAfter with HomeCr
         contenido should be equals hola
     }
 
+    "Un usuario" should "poder conocer a todos sus contactos" in {
+        amigosService.amigarseCon(fixture.usuarioMaria, fixture.usuarioCarlono)
+        //pepe es amigo de carlono pero no a la inversa, no debería aparecer listado
+        amigosService.amigarseCon(fixture.usuarioPepe, fixture.usuarioCarlono)
+
+        amigosService.amigarseCon(fixture.usuarioCarlono, fixture.usuarioNahue)
+        amigosService.amigarseCon(fixture.usuarioNahue, fixture.usuarioRonny)
+        //acá hay un bucle, carlono debería aparecer una única vez
+        amigosService.amigarseCon(fixture.usuarioNahue, fixture.usuarioCarlono)
+
+        val contactos = amigosService.misContactos(fixture.usuarioMaria)
+        contactos.size should be equals 3
+        contactos.contains(fixture.usuarioPepe.id)  shouldBe false
+        contactos.contains(fixture.usuarioCarlono.id) shouldBe true
+        contactos.contains(fixture.usuarioNahue.id) shouldBe true
+        contactos.contains(fixture.usuarioRonny.id) shouldBe true
+    }
+
 }
