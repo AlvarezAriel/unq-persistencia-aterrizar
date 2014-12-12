@@ -24,18 +24,18 @@ class AmigosService {
     }
 
     def enviarMensaje(usuarioOrigen:UsuarioEntity, usuarioTarget:UsuarioEntity, mensaje:String): Unit ={
-
+        Cypher(
+        s"""MERGE (user:Usuario {key:${usuarioOrigen.id}, name:"${usuarioOrigen.nombre}"})
+            |MERGE (target:Usuario {key:${usuarioTarget.id}, name:"${usuarioTarget.nombre}"})
+            |CREATE (user)-[:ENVIO]-> (mensaje:Mensaje {contenido:"$mensaje"} ) <-[:RECIBIO]- (target)
+              """.stripMargin).execute()
     }
 
     def misContactos(usuarioOrigen:UsuarioEntity)={
-
-    }
-}
-
-class EnviadorDeMensajes {
-
-    def enviar(mensaje:String): Unit ={
-        //si si... vos sentate tranquilo que te lo envío
-        mensaje
+        Cypher(
+            s"""
+            |MATCH (user:Usuario {key:${usuarioOrigen.id}) -[:AMIGO_DE*]-> (otro)
+            |RETURN Distinct otro.key
+              """.stripMargin).execute()
     }
 }

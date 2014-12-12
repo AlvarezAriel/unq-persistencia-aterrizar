@@ -48,4 +48,12 @@ class AnormCypher extends FlatSpec with Matchers with BeforeAndAfter with HomeCr
         amigos.contains(fixture.usuarioPepe.id)  shouldBe true
     }
 
+    "Un usuario" should "poder enviarle un mensaje a otro" in {
+        amigosService.amigarseCon(fixture.usuarioMaria, fixture.usuarioCarlono)
+        val hola: String = "hola"
+        amigosService.enviarMensaje(fixture.usuarioMaria, fixture.usuarioCarlono, hola)
+        val contenido = Cypher("MATCH (user { name:'Maria'})-[:ENVIO]-> (mensaje) RETURN mensaje.contenido")().head[String]("mensaje.contenido")
+        contenido should be equals hola
+    }
+
 }
