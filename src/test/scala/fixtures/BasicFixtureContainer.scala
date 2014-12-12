@@ -9,6 +9,10 @@ import scala.collection._
 trait BasicFixtureContainer {
   case class BasicFixture(){
     val usuarioPepe = UsuarioEntity("Pepe", "Pompin", "sarasascosmicas", "p@p.p", DateTime.parse("2014-10-25"), validado = false, "", password = "pepon")
+    val usuarioMaria = UsuarioEntity("Maria", "Sarasa", "mariasarasa", "p@p.p", DateTime.parse("2014-10-25"), validado = false, "", password = "pepon")
+    val usuarioCarlono = UsuarioEntity("Carlono", "Sarasita", "carlono", "p@p.p", DateTime.parse("2014-10-25"), validado = false, "", password = "pepon")
+    val usuarioRonny= UsuarioEntity("Ronny", "de Jesus", "ronny", "p@p.p", DateTime.parse("2014-10-25"), validado = false, "", password = "pepon")
+    val usuarioNahue = UsuarioEntity("nahue", "benitez", "nahue", "p@p.p", DateTime.parse("2014-10-25"), validado = false, "", password = "pepon")
 
     val origenBuenosAires = Locacion("Buenos Aires")
     val origenNewYork = Locacion("New York")

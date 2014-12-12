@@ -1,10 +1,16 @@
+
 name := """aterrizar"""
 
 version := "1.0"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11"
 
 //mainClass in Compile := Some("HelloSlick")
+
+resolvers ++= Seq(
+    "anormcypher" at "http://repo.anormcypher.org/",
+    "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/"
+)
 
 libraryDependencies ++= List(
   "com.typesafe.slick" %% "slick" % "2.0.0",
@@ -19,5 +25,6 @@ libraryDependencies ++= List(
   "org.slf4j" % "slf4j-api" % "1.6.1",
   "org.slf4j" % "slf4j-log4j12" % "1.6.1",
   "log4j" % "log4j" % "1.2.16",
-  "org.jadira.usertype" % "usertype.core" % "3.0.0.CR1"
+  "org.jadira.usertype" % "usertype.core" % "3.0.0.CR1",
+   "org.anormcypher" %% "anormcypher" % "0.4.4"
 )
